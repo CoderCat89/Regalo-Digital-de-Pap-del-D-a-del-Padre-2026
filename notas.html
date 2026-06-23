@@ -1,0 +1,609 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notas de Cariño para Papá</title>
+    <!-- Tailwind CSS CDN para un diseño responsivo y súper estilizado -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Capas de fondo para efectos interactivos */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+        }
+        #bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 1) 100%);
+            transition: background 0.3s ease;
+        }
+        /* Tablero de corcho virtual */
+        #corkboard {
+            position: relative;
+            background: rgba(15, 23, 42, 0.6);
+            border: 4px dashed rgba(52, 211, 153, 0.2);
+            min-height: 550px;
+        }
+        /* Nota adhesiva estilo Post-It */
+        .post-it {
+            position: absolute;
+            cursor: grab;
+            user-select: none;
+            touch-action: none; /* Evita scrolls raros en teléfonos al arrastrar */
+        }
+        .post-it:active {
+            cursor: grabbing;
+            transform: scale(1.05) rotate(0deg) !important;
+            z-index: 50 !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen font-sans relative overflow-x-hidden select-none">
+
+    <!-- Brillo interactivo de fondo -->
+    <div id="bg-glow"></div>
+
+    <!-- Lienzos independientes para la fiesta de confeti y cohetes -->
+    <canvas id="confetti-canvas"></canvas>
+    <canvas id="fireworks-canvas"></canvas>
+
+    <!-- Contenido principal -->
+    <div class="relative z-10 min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-950/40 via-transparent to-emerald-950/40">
+        
+        <!-- Barra de Navegación Chapina -->
+        <nav class="bg-slate-900/80 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-30">
+            <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
+                <a href="/" class="text-xl font-black tracking-wider text-emerald-400 drop-shadow-md">💙 PAPÁ 2026 💚</a>
+                <div class="flex flex-wrap gap-2 text-xs md:text-sm font-semibold">
+                    <a href="/sitios_mas_visitados" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🌐 Favoritos</a>
+                    <a href="/poncita" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🌸 Poncita</a>
+                    <a href="/poncito" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">💎 Poncito</a>
+                    <a href="/recuerdos" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">📅 Bitácora</a>
+                    <a href="/calculadora" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🧮 Calculadora</a>
+                    <a href="/notas" class="text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/30">📌 Notas</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenedor Principal del Pizarrón -->
+        <main class="max-w-4xl mx-auto px-4 py-8 flex-grow flex flex-col items-center justify-center text-center gap-6 w-full">
+            
+            <!-- Cabecera -->
+            <header class="space-y-1">
+                <h1 class="text-3xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent drop-shadow-lg">
+                    NOTITAS DE CARIÑO 📌
+                </h1>
+                <p class="text-sm md:text-lg text-blue-200">
+                    ¡Escribe un mensajito nuevo o arrastra los papelitos con tu dedo, Papá! 📱✍️
+                </p>
+            </header>
+
+            <!-- Botón para crear nueva nota -->
+            <div class="z-20">
+                <button onclick="showNoteModal()" class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black px-6 py-3 rounded-xl shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-95 transition-all text-sm flex items-center gap-2 cursor-pointer border border-emerald-300/20">
+                    ✍️ Agregar una nueva nota
+                </button>
+            </div>
+
+            <!-- El Pizarrón de Notas Draggable -->
+            <section id="corkboard" class="w-full rounded-3xl overflow-hidden shadow-2xl z-20">
+                <!-- Las notas se cargarán aquí dinámicamente desde el localStorage -->
+            </section>
+
+            <!-- Mensajito aclaratorio -->
+            <p class="text-[11px] text-emerald-300/80 bg-slate-900/40 px-4 py-2 rounded-lg border border-white/5 max-w-md z-20">
+                💡 Cada notita se guarda automáticamente en el teléfono de Papá, ¡así que nunca se borrarán ni se perderán sus cambios!
+            </p>
+
+            <!-- Botón de Retorno -->
+            <div class="z-20">
+                <a href="/" class="bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white px-6 py-3 rounded-xl border border-white/10 transition text-sm font-bold shadow-md active:scale-95">
+                    ⬅️ Regresar al Inicio
+                </a>
+            </div>
+
+        </main>
+
+        <!-- Pie de Página -->
+        <footer class="bg-slate-950 text-[10px] text-center p-4 border-t border-white/5 text-gray-500">
+            <p>Hecho con todo el amor de tu hijo que te adora con el corazón • 2026 🥇</p>
+        </footer>
+
+    </div>
+
+    <!-- MODAL PERSONALIZADO PARA NUEVAS NOTAS (Evita usar el alert() o prompts que fallan) -->
+    <div id="note-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-5 space-y-4">
+            <h3 id="modal-title" class="text-base font-bold text-emerald-400">📝 Escribir Nota para Papá</h3>
+            
+            <textarea id="note-text-input" rows="3" placeholder="Escribe tu mensaje con amor aquí..." class="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-400 resize-none font-medium"></textarea>
+            
+            <!-- Selector de colores lindos para la nota -->
+            <div class="space-y-1.5">
+                <label class="text-xs text-gray-400 font-bold block">Elige un color llamativo:</label>
+                <div class="flex gap-2.5 justify-center">
+                    <button onclick="selectColor('bg-yellow-200 text-slate-900 border-yellow-300')" class="w-7 h-7 rounded-full bg-yellow-200 border-2 border-yellow-400 cursor-pointer active:scale-90" id="color-yellow"></button>
+                    <button onclick="selectColor('bg-emerald-200 text-slate-900 border-emerald-300')" class="w-7 h-7 rounded-full bg-emerald-200 border-2 border-emerald-400 cursor-pointer active:scale-90" id="color-emerald"></button>
+                    <button onclick="selectColor('bg-sky-200 text-slate-900 border-sky-300')" class="w-7 h-7 rounded-full bg-sky-200 border-2 border-sky-400 cursor-pointer active:scale-90" id="color-sky"></button>
+                    <button onclick="selectColor('bg-rose-200 text-slate-900 border-rose-300')" class="w-7 h-7 rounded-full bg-rose-200 border-2 border-rose-400 cursor-pointer active:scale-90" id="color-rose"></button>
+                    <button onclick="selectColor('bg-purple-200 text-slate-900 border-purple-300')" class="w-7 h-7 rounded-full bg-purple-200 border-2 border-purple-400 cursor-pointer active:scale-90" id="color-purple"></button>
+                </div>
+            </div>
+
+            <!-- Botones del Modal -->
+            <div class="flex gap-3 pt-2">
+                <button onclick="closeNoteModal()" class="w-1/2 bg-white/5 hover:bg-white/10 text-gray-300 py-2.5 rounded-xl border border-white/10 text-xs font-bold active:scale-95 transition cursor-pointer">Cancelar</button>
+                <button onclick="saveNote()" class="w-1/2 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 py-2.5 rounded-xl text-xs font-black active:scale-95 transition shadow-lg shadow-emerald-500/10 cursor-pointer">Guardar Nota</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensajito flotante de guardado -->
+    <div id="toast-message" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 border border-emerald-500/30 px-4 py-2 rounded-xl text-xs text-emerald-400 font-bold shadow-lg z-50 hidden opacity-0 transition-all duration-300">
+        📝 ¡Cambios guardados en tu teléfono, Papá!
+    </div>
+
+    <!-- Script de Datos, Arrastre Táctil y Efectos -->
+    <script>
+        // --- 1. PERSISTENCIA EN LOCALSTORAGE CON NOTAS DE AMOR POR DEFECTO ---
+        let notes = [];
+        let selectedColorClass = 'bg-yellow-200 text-slate-900 border-yellow-300';
+        let editingNoteId = null;
+
+        const board = document.getElementById('corkboard');
+        const modal = document.getElementById('note-modal');
+        const textInput = document.getElementById('note-text-input');
+
+        const defaultNotes = [
+            {
+                id: 1,
+                text: "¡Te amo con todo mi corazón, Papá! Eres mi gran superhéroe 💙✨",
+                color: "bg-yellow-200 text-slate-900 border-yellow-300",
+                x: 10,
+                y: 20
+            },
+            {
+                id: 2,
+                text: "Me gusta muchísimo que juegues conmigo y me cargues. ¡Nadie se divierte tanto como nosotros! 🧸🚀",
+                color: "bg-sky-200 text-slate-900 border-sky-300",
+                x: 50,
+                y: 60
+            },
+            {
+                id: 3,
+                text: "Te extraño muchísimo desde Guatemala 😢😢😢 ¡Te mando un abrazo fuerte de oso!",
+                color: "bg-rose-200 text-slate-900 border-rose-300",
+                x: 20,
+                y: 190
+            },
+            {
+                id: 4,
+                text: "¡Feliz Día del Padre 2026! Eres el mero campeón, Papá 🥇🏆",
+                color: "bg-emerald-200 text-slate-900 border-emerald-300",
+                x: 55,
+                y: 240
+            }
+        ];
+
+        function loadNotes() {
+            const stored = localStorage.getItem('papas_notes_2026');
+            if (stored) {
+                notes = JSON.parse(stored);
+            } else {
+                notes = [...defaultNotes];
+                saveToLocalStorage();
+            }
+            renderNotes();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('papas_notes_2026', JSON.stringify(notes));
+            showToast();
+        }
+
+        // --- RENDERIZADO DE LAS NOTAS ---
+        function renderNotes() {
+            // Guardar notas existentes para no perder el estado antes de limpiar
+            board.innerHTML = '';
+            
+            notes.forEach(note => {
+                const card = document.createElement('div');
+                card.id = `note-${note.id}`;
+                card.className = `post-it ${note.color} p-4 rounded-xl shadow-xl border w-44 min-h-[110px] flex flex-col justify-between text-left transition-transform duration-100`;
+                
+                // Posicionar de forma responsiva dentro del tablero
+                card.style.left = `${note.x}%`;
+                card.style.top = `${note.y}px`;
+                
+                // Rotación ligera aleatoria para dar un aspecto de post-it realista
+                const randomRot = (note.id % 2 === 0 ? 1 : -1) * (note.id % 5 + 1);
+                card.style.transform = `rotate(${randomRot}deg)`;
+
+                card.innerHTML = `
+                    <p class="text-[11px] font-semibold leading-relaxed break-words pr-2 select-text">${note.text}</p>
+                    <div class="flex justify-end gap-1.5 mt-2 border-t border-black/5 pt-1.5 select-none">
+                        <button onclick="editNote(${note.id}, event)" class="text-[10px] text-slate-700 hover:text-black font-bold cursor-pointer">✏️</button>
+                        <button onclick="deleteNote(${note.id}, event)" class="text-[10px] text-red-700 hover:text-red-900 font-bold cursor-pointer">❌</button>
+                    </div>
+                `;
+
+                // Agregar interactividad de arrastre táctil (Mobile y Desktop)
+                makeElementDraggable(card, note);
+                board.appendChild(card);
+            });
+        }
+
+        // --- ARRASTRE ADAPTABLE A PANTALLAS TÁCTILES ---
+        function makeElementDraggable(elmnt, noteObj) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+            elmnt.addEventListener('mousedown', dragMouseDown);
+            elmnt.addEventListener('touchstart', dragTouchStart, { passive: false });
+
+            function dragMouseDown(e) {
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.addEventListener('mouseup', closeDragElement);
+                document.addEventListener('mousemove', elementDrag);
+            }
+
+            function dragTouchStart(e) {
+                const touch = e.touches[0];
+                pos3 = touch.clientX;
+                pos4 = touch.clientY;
+                document.addEventListener('touchend', closeDragElement);
+                document.addEventListener('touchmove', elementTouchDrag, { passive: false });
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                updatePosition();
+            }
+
+            function elementTouchDrag(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                pos1 = pos3 - touch.clientX;
+                pos2 = pos4 - touch.clientY;
+                pos3 = touch.clientX;
+                pos4 = touch.clientY;
+                updatePosition();
+            }
+
+            function updatePosition() {
+                // Cálculo de límites dentro del pizarrón
+                let newY = elmnt.offsetTop - pos2;
+                let newLeftPixels = elmnt.offsetLeft - pos1;
+                
+                // Límites verticales
+                if (newY < 5) newY = 5;
+                if (newY > board.clientHeight - elmnt.clientHeight - 5) newY = board.clientHeight - elmnt.clientHeight - 5;
+
+                // Límites horizontales
+                const maxLeftPixels = board.clientWidth - elmnt.clientWidth - 5;
+                if (newLeftPixels < 5) newLeftPixels = 5;
+                if (newLeftPixels > maxLeftPixels) newLeftPixels = maxLeftPixels;
+
+                // Guardar la posición en porcentaje horizontal para adaptabilidad al girar el cel
+                const leftPercent = (newLeftPixels / board.clientWidth) * 100;
+
+                elmnt.style.top = `${newY}px`;
+                elmnt.style.left = `${leftPercent}%`;
+
+                // Actualizar objeto en memoria
+                noteObj.x = leftPercent;
+                noteObj.y = newY;
+            }
+
+            function closeDragElement() {
+                document.removeEventListener('mouseup', closeDragElement);
+                document.removeEventListener('mousemove', elementDrag);
+                document.removeEventListener('touchend', closeDragElement);
+                document.removeEventListener('touchmove', elementTouchDrag);
+                saveToLocalStorage();
+            }
+        }
+
+        // --- ACCIONES DEL MODAL DE NOTAS ---
+        function showNoteModal() {
+            editingNoteId = null;
+            document.getElementById('modal-title').innerText = '📝 Escribir Nota para Papá';
+            textInput.value = '';
+            selectColor('bg-yellow-200 text-slate-900 border-yellow-300');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeNoteModal() {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        function selectColor(colorClass) {
+            selectedColorClass = colorClass;
+            // Remover bordes de selección anteriores
+            document.querySelectorAll('#note-modal button').forEach(btn => {
+                if (btn.id && btn.id.startsWith('color-')) {
+                    btn.classList.remove('scale-110', 'border-white');
+                }
+            });
+            // Resaltar seleccionado
+            const activeColorName = colorClass.split(' ')[0].split('-')[1];
+            const activeBtn = document.getElementById(`color-${activeColorName}`);
+            if (activeBtn) activeBtn.classList.add('scale-110', 'border-white');
+        }
+
+        function saveNote() {
+            const txt = textInput.value.trim();
+            if (!txt) return;
+
+            if (editingNoteId !== null) {
+                // Modo Edición
+                const note = notes.find(n => n.id === editingNoteId);
+                if (note) {
+                    note.text = txt;
+                    note.color = selectedColorClass;
+                }
+            } else {
+                // Modo Nueva Nota (Posición aleatoria por defecto)
+                const newId = notes.length > 0 ? Math.max(...notes.map(n => n.id)) + 1 : 1;
+                const randomX = Math.random() * 45 + 5;
+                const randomY = Math.random() * 200 + 30;
+
+                notes.push({
+                    id: newId,
+                    text: txt,
+                    color: selectedColorClass,
+                    x: randomX,
+                    y: randomY
+                });
+            }
+
+            saveToLocalStorage();
+            renderNotes();
+            closeNoteModal();
+        }
+
+        function editNote(id, e) {
+            e.stopPropagation();
+            const note = notes.find(n => n.id === id);
+            if (!note) return;
+
+            editingNoteId = id;
+            document.getElementById('modal-title').innerText = '✏️ Editar tu Nota';
+            textInput.value = note.text;
+            selectColor(note.color);
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function deleteNote(id, e) {
+            e.stopPropagation();
+            notes = notes.filter(n => n.id !== id);
+            saveToLocalStorage();
+            renderNotes();
+        }
+
+        // Mostrar Toast de Guardado
+        function showToast() {
+            const toast = document.getElementById('toast-message');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 2500);
+        }
+
+        
+        // --- LIENZOS PARA EFECTOS DE FIESTA ---
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const ctxConf = confettiCanvas.getContext('2d');
+
+        const fireworksCanvas = document.getElementById('fireworks-canvas');
+        const ctxFire = fireworksCanvas.getContext('2d');
+
+        function resize() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+            fireworksCanvas.width = window.innerWidth;
+            fireworksCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- SISTEMA DE CONFETI REALISTA (3D) ---
+        class ConfettiParticle {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * confettiCanvas.height;
+            }
+            reset() {
+                this.x = Math.random() * confettiCanvas.width;
+                this.y = -20;
+                this.size = Math.random() * 6 + 6;
+                this.color = `hsl(${Math.random() * 360}, 90%, 60%)`;
+                this.speedY = Math.random() * 1.5 + 2;
+                this.speedX = Math.random() * 1.5 - 0.75;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 4 + 2;
+                this.oscillationSpeed = Math.random() * 0.02 + 0.01;
+                this.angle = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.angle += this.oscillationSpeed;
+                this.x += Math.sin(this.angle) * 0.8 + this.speedX;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > confettiCanvas.height + 20) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctxConf.save();
+                ctxConf.translate(this.x, this.y);
+                ctxConf.rotate(this.rotation * Math.PI / 180);
+                ctxConf.fillStyle = this.color;
+                const width = this.size * Math.cos(this.rotation * 0.05);
+                ctxConf.fillRect(-width / 2, -this.size / 2, width, this.size);
+                ctxConf.restore();
+            }
+        }
+
+        const confettiArray = [];
+        for (let i = 0; i < 40; i++) {
+            confettiArray.push(new ConfettiParticle());
+        }
+
+        // --- SISTEMA DE FUEGOS ARTIFICIALES (ESTILO COHETE) ---
+        let fireworks = [];
+        let particles = [];
+
+        class Firework {
+            constructor(startX, startY, targetX, targetY) {
+                this.x = startX;
+                this.y = startY;
+                this.targetX = targetX;
+                this.targetY = targetY;
+                this.speed = Math.random() * 4 + 8;
+                this.angle = Math.atan2(targetY - startY, targetX - startX);
+                this.color = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                this.trail = [];
+            }
+            update() {
+                this.trail.push({ x: this.x, y: this.y });
+                if (this.trail.length > 10) this.trail.shift();
+
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+
+                if (this.y <= this.targetY) {
+                    explode(this.targetX, this.targetY, this.color);
+                    return false;
+                }
+                return true;
+            }
+            draw() {
+                ctxFire.beginPath();
+                ctxFire.moveTo(this.x, this.y);
+                for (let i = this.trail.length - 1; i >= 0; i--) {
+                    ctxFire.lineTo(this.trail[i].x, this.trail[i].y);
+                }
+                ctxFire.strokeStyle = this.color;
+                ctxFire.lineWidth = 2.5;
+                ctxFire.stroke();
+            }
+        }
+
+        class SparkParticle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 1.5;
+                this.speedX = Math.cos(angle) * speed;
+                this.speedY = Math.sin(angle) * speed;
+                this.gravity = 0.07;
+                this.friction = 0.95;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.01;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.speedX *= this.friction;
+                this.speedY *= this.friction;
+                this.speedY += this.gravity;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= this.decay;
+                return this.alpha > 0;
+            }
+            draw() {
+                ctxFire.save();
+                ctxFire.globalAlpha = this.alpha;
+                ctxFire.beginPath();
+                ctxFire.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctxFire.fillStyle = this.color;
+                ctxFire.shadowBlur = 10;
+                ctxFire.shadowColor = this.color;
+                ctxFire.fill();
+                ctxFire.restore();
+            }
+        }
+
+        function explode(x, y, color) {
+            for (let i = 0; i < 50; i++) {
+                particles.push(new SparkParticle(x, y, color));
+            }
+            const bg = document.getElementById('bg-glow');
+            bg.style.background = `radial-gradient(circle at ${x}px ${y}px, ${color.replace('hsl', 'hsla').replace(')', ', 0.20)')} 0%, rgba(15, 23, 42, 1) 80%)`;
+            setTimeout(() => {
+                bg.style.background = 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 1) 100%)';
+            }, 250);
+        }
+
+        // Toques en pantalla para lanzar cohetes (solo en espacios vacíos de la pantalla)
+        window.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('a') || e.target.closest('nav') || e.target.closest('button') || e.target.closest('section') || e.target.closest('#note-modal')) return;
+            fireworks.push(new Firework(e.clientX, window.innerHeight, e.clientX, e.clientY));
+        });
+
+        // Lanzamiento automático lento de fondo para mantener vivo el diseño
+        setInterval(() => {
+            if (document.hidden) return;
+            const x = Math.random() * window.innerWidth;
+            const targetY = Math.random() * (window.innerHeight * 0.45) + (window.innerHeight * 0.1);
+            fireworks.push(new Firework(x, window.innerHeight, x, targetY));
+        }, 4000);
+
+        // --- ANIMACIÓN ---
+        function animate() {
+            ctxConf.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiArray.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            ctxFire.fillStyle = 'rgba(15, 23, 42, 0.16)';
+            ctxFire.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+
+            fireworks = fireworks.filter(f => f.update());
+            fireworks.forEach(f => f.draw());
+
+            particles = particles.filter(p => p.update());
+            particles.forEach(p => p.draw());
+
+            requestAnimationFrame(animate);
+        }
+
+        window.onload = () => {
+            loadNotes();
+            animate();
+        };
+    </script>
+</body>
+</html>
