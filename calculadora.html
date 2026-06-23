@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Calculadora de Papá</title>
+    <!-- Tailwind CSS para diseño rápido, moderno y responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Capas de fondo para que los efectos de luces no obstruyan los botones */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+        }
+        #bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 1) 100%);
+            transition: background 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen font-sans relative overflow-x-hidden select-none">
+
+    <!-- Brillo interactivo de fondo -->
+    <div id="bg-glow"></div>
+
+    <!-- Lienzos para los fuegos artificiales realistas y el confeti en 3D -->
+    <canvas id="confetti-canvas"></canvas>
+    <canvas id="fireworks-canvas"></canvas>
+
+    <!-- Contenido sobrepuesto -->
+    <div class="relative z-10 min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-950/40 via-transparent to-emerald-950/40">
+        
+        <!-- Barra de Navegación Chapina -->
+        <nav class="bg-slate-900/80 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-30">
+            <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
+                <a href="/" class="text-xl font-black tracking-wider text-emerald-400 drop-shadow-md">💙 PAPÁ 2026 💚</a>
+                <div class="flex flex-wrap gap-2 text-xs md:text-sm font-semibold">
+                    <a href="/sitios_mas_visitados" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🌐 Favoritos</a>
+                    <a href="/poncita" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🌸 Poncita</a>
+                    <a href="/poncito" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">💎 Poncito</a>
+                    <a href="/recuerdos" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">📅 Bitácora</a>
+                    <a href="/calculadora" class="text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/30">🧮 Calculadora</a>
+                    <a href="/notas" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">📌 Notas</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenedor de la Calculadora -->
+        <main class="max-w-4xl mx-auto px-4 py-8 flex-grow flex flex-col items-center justify-center text-center gap-6 w-full">
+            
+            <!-- Encabezado de la Herramienta -->
+            <header class="space-y-1">
+                <h1 class="text-3xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent drop-shadow-lg animate-pulse">
+                    TU CALCULADORA GENIAL 🧮
+                </h1>
+                <p class="text-sm md:text-lg text-blue-200">
+                    Una herramienta súper útil y de a huevo para tus cuentas diarias, Papá.
+                </p>
+            </header>
+
+            <!-- La Calculadora (Estructura física) -->
+            <section class="w-full max-w-[340px] bg-slate-900/80 backdrop-blur-lg p-5 rounded-3xl border border-white/15 shadow-2xl space-y-4 z-20 flex flex-col">
+                
+                <!-- Pantalla Digital -->
+                <div class="bg-black/60 rounded-2xl p-4 border border-white/5 flex flex-col justify-end items-end h-24 overflow-hidden relative">
+                    <!-- Brillo de neón interno -->
+                    <div class="absolute inset-0 bg-emerald-500/5 pointer-events-none"></div>
+                    <!-- Expresión pequeña -->
+                    <div id="calc-expression" class="text-xs text-gray-400 tracking-wider h-5 overflow-hidden w-full text-right font-mono truncate"></div>
+                    <!-- Resultado grande -->
+                    <div id="calc-display" class="text-3xl font-black text-emerald-400 tracking-tight font-mono truncate w-full text-right select-all">0</div>
+                </div>
+
+                <!-- Teclado de Botones -->
+                <div class="grid grid-cols-4 gap-3">
+                    
+                    <!-- Fila 1: Control -->
+                    <button onclick="pressKey('C')" class="bg-red-500/15 hover:bg-red-500/25 text-red-400 font-black p-4 rounded-2xl border border-red-500/20 active:scale-95 transition text-lg cursor-pointer">C</button>
+                    <button onclick="pressKey('(')" class="bg-white/5 hover:bg-white/10 text-emerald-300 font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">(</button>
+                    <button onclick="pressKey(')')" class="bg-white/5 hover:bg-white/10 text-emerald-300 font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">)</button>
+                    <button onclick="pressKey('/')" class="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 font-black p-4 rounded-2xl border border-emerald-500/20 active:scale-95 transition text-lg cursor-pointer">÷</button>
+
+                    <!-- Fila 2: Números y Operación -->
+                    <button onclick="pressKey('7')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">7</button>
+                    <button onclick="pressKey('8')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">8</button>
+                    <button onclick="pressKey('9')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">9</button>
+                    <button onclick="pressKey('*')" class="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 font-black p-4 rounded-2xl border border-emerald-500/20 active:scale-95 transition text-lg cursor-pointer">×</button>
+
+                    <!-- Fila 3: Números y Operación -->
+                    <button onclick="pressKey('4')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">4</button>
+                    <button onclick="pressKey('5')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">5</button>
+                    <button onclick="pressKey('6')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">6</button>
+                    <button onclick="pressKey('-')" class="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 font-black p-4 rounded-2xl border border-emerald-500/20 active:scale-95 transition text-lg cursor-pointer">−</button>
+
+                    <!-- Fila 4: Números y Operación -->
+                    <button onclick="pressKey('1')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">1</button>
+                    <button onclick="pressKey('2')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">2</button>
+                    <button onclick="pressKey('3')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">3</button>
+                    <button onclick="pressKey('+')" class="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 font-black p-4 rounded-2xl border border-emerald-500/20 active:scale-95 transition text-lg cursor-pointer">+</button>
+
+                    <!-- Fila 5: Números y Cierre -->
+                    <button onclick="pressKey('0')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">0</button>
+                    <button onclick="pressKey('.')" class="bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-lg cursor-pointer">.</button>
+                    <button onclick="pressKey('DEL')" class="bg-white/5 hover:bg-white/10 text-gray-300 font-bold p-4 rounded-2xl border border-white/5 active:scale-95 transition text-sm flex items-center justify-center cursor-pointer">⌫</button>
+                    <button onclick="pressKey('=')" class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black p-4 rounded-2xl active:scale-95 transition text-lg cursor-pointer shadow-lg shadow-emerald-500/20">=</button>
+
+                </div>
+
+            </section>
+
+            <!-- Botones de Navegación del Sitio -->
+            <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md justify-center items-center z-20">
+                <a href="/" class="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white px-6 py-3 rounded-xl border border-white/10 transition text-sm font-bold text-center active:scale-95">
+                    ⬅️ Regresar al Inicio
+                </a>
+                <a href="/notas" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-black px-6 py-3 rounded-xl shadow-lg hover:shadow-emerald-500/20 active:scale-95 transition-all text-center border border-emerald-400/30">
+                    Ir a las Notas 📌
+                </a>
+            </div>
+
+        </main>
+
+        <!-- Pie de Página -->
+        <footer class="bg-slate-950 text-[10px] text-center p-4 border-t border-white/5 text-gray-500">
+            <p>Hecho con todo el amor de tu hijo que te adora con el corazón • 2026 🥇</p>
+        </footer>
+
+    </div>
+
+    <!-- Script de Lógica para la Calculadora y Efectos de Fiesta -->
+    <script>
+        // --- LÓGICA DE LA CALCULADORA ---
+        let expression = '';
+        let shouldClear = false;
+
+        const display = document.getElementById('calc-display');
+        const exprDisplay = document.getElementById('calc-expression');
+
+        function pressKey(key) {
+            if (shouldClear && key !== '=' && key !== '+' && key !== '-' && key !== '*' && key !== '/') {
+                expression = '';
+                shouldClear = false;
+            }
+
+            if (key === 'C') {
+                expression = '';
+                display.innerText = '0';
+                exprDisplay.innerText = '';
+                shouldClear = false;
+            } else if (key === 'DEL') {
+                expression = expression.slice(0, -1);
+                display.innerText = expression || '0';
+                shouldClear = false;
+            } else if (key === '=') {
+                try {
+                    if (!expression) return;
+                    // Limpieza segura de la expresión antes de evaluarla
+                    const safeExpression = expression.replace(/[^-()\d/*+.]/g, '');
+                    // Cálculo seguro usando Function
+                    const result = new Function(`return ${safeExpression}`)();
+                    exprDisplay.innerText = expression + ' =';
+                    display.innerText = Number.isInteger(result) ? result : parseFloat(result.toFixed(6));
+                    expression = display.innerText;
+                    shouldClear = true;
+                } catch (error) {
+                    display.innerText = 'Error';
+                    expression = '';
+                    shouldClear = true;
+                }
+            } else {
+                expression += key;
+                display.innerText = expression;
+                shouldClear = false;
+            }
+        }
+
+        // --- LIENZOS PARA EFECTOS DE FIESTA ---
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const ctxConf = confettiCanvas.getContext('2d');
+
+        const fireworksCanvas = document.getElementById('fireworks-canvas');
+        const ctxFire = fireworksCanvas.getContext('2d');
+
+        function resize() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+            fireworksCanvas.width = window.innerWidth;
+            fireworksCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- SISTEMA DE CONFETI REALISTA (3D) ---
+        class ConfettiParticle {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * confettiCanvas.height;
+            }
+            reset() {
+                this.x = Math.random() * confettiCanvas.width;
+                this.y = -20;
+                this.size = Math.random() * 6 + 6;
+                this.color = `hsl(${Math.random() * 360}, 90%, 60%)`;
+                this.speedY = Math.random() * 1.5 + 2;
+                this.speedX = Math.random() * 1.5 - 0.75;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 4 + 2;
+                this.oscillationSpeed = Math.random() * 0.02 + 0.01;
+                this.angle = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.angle += this.oscillationSpeed;
+                this.x += Math.sin(this.angle) * 0.8 + this.speedX;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > confettiCanvas.height + 20) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctxConf.save();
+                ctxConf.translate(this.x, this.y);
+                ctxConf.rotate(this.rotation * Math.PI / 180);
+                ctxConf.fillStyle = this.color;
+                const width = this.size * Math.cos(this.rotation * 0.05);
+                ctxConf.fillRect(-width / 2, -this.size / 2, width, this.size);
+                ctxConf.restore();
+            }
+        }
+
+        const confettiArray = [];
+        for (let i = 0; i < 45; i++) {
+            confettiArray.push(new ConfettiParticle());
+        }
+
+        // --- SISTEMA DE FUEGOS ARTIFICIALES (ESTILO COHETE) ---
+        let fireworks = [];
+        let particles = [];
+
+        class Firework {
+            constructor(startX, startY, targetX, targetY) {
+                this.x = startX;
+                this.y = startY;
+                this.targetX = targetX;
+                this.targetY = targetY;
+                this.speed = Math.random() * 4 + 8;
+                this.angle = Math.atan2(targetY - startY, targetX - startX);
+                this.color = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                this.trail = [];
+            }
+            update() {
+                this.trail.push({ x: this.x, y: this.y });
+                if (this.trail.length > 10) this.trail.shift();
+
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+
+                if (this.y <= this.targetY) {
+                    explode(this.targetX, this.targetY, this.color);
+                    return false;
+                }
+                return true;
+            }
+            draw() {
+                ctxFire.beginPath();
+                ctxFire.moveTo(this.x, this.y);
+                for (let i = this.trail.length - 1; i >= 0; i--) {
+                    ctxFire.lineTo(this.trail[i].x, this.trail[i].y);
+                }
+                ctxFire.strokeStyle = this.color;
+                ctxFire.lineWidth = 2.5;
+                ctxFire.stroke();
+            }
+        }
+
+        class SparkParticle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 1.5;
+                this.speedX = Math.cos(angle) * speed;
+                this.speedY = Math.sin(angle) * speed;
+                this.gravity = 0.07;
+                this.friction = 0.95;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.01;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.speedX *= this.friction;
+                this.speedY *= this.friction;
+                this.speedY += this.gravity;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= this.decay;
+                return this.alpha > 0;
+            }
+            draw() {
+                ctxFire.save();
+                ctxFire.globalAlpha = this.alpha;
+                ctxFire.beginPath();
+                ctxFire.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctxFire.fillStyle = this.color;
+                ctxFire.shadowBlur = 10;
+                ctxFire.shadowColor = this.color;
+                ctxFire.fill();
+                ctxFire.restore();
+            }
+        }
+
+        function explode(x, y, color) {
+            for (let i = 0; i < 50; i++) {
+                particles.push(new SparkParticle(x, y, color));
+            }
+            const bg = document.getElementById('bg-glow');
+            bg.style.background = `radial-gradient(circle at ${x}px ${y}px, ${color.replace('hsl', 'hsla').replace(')', ', 0.20)')} 0%, rgba(15, 23, 42, 1) 80%)`;
+            setTimeout(() => {
+                bg.style.background = 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 1) 100%)';
+            }, 250);
+        }
+
+        // Toques en pantalla para lanzar cohetes (solo en espacios vacíos de la pantalla)
+        window.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('a') || e.target.closest('nav') || e.target.closest('button') || e.target.closest('section')) return;
+            fireworks.push(new Firework(e.clientX, window.innerHeight, e.clientX, e.clientY));
+        });
+
+        // Lanzamiento automático lento de fondo para mantener vivo el diseño
+        setInterval(() => {
+            if (document.hidden) return;
+            const x = Math.random() * window.innerWidth;
+            const targetY = Math.random() * (window.innerHeight * 0.45) + (window.innerHeight * 0.1);
+            fireworks.push(new Firework(x, window.innerHeight, x, targetY));
+
+        // --- ANIMACIÓN ---
+        function animate() {
+            ctxConf.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiArray.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            ctxFire.fillStyle = 'rgba(15, 23, 42, 0.16)';
+            ctxFire.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+
+            fireworks = fireworks.filter(f => f.update());
+            fireworks.forEach(f => f.draw());
+
+            particles = particles.filter(p => p.update());
+            particles.forEach(p => p.draw());
+
+            requestAnimationFrame(animate);
+        }
+
+        window.onload = animate;
+    </script>
+</body>
+</html>
