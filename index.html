@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Día del Padre 2026, Papá!</title>
+    <!-- Tailwind CSS para diseño moderno, limpio y responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Capas de fondo para que no interfieran con los botones */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; /* Dejamos que los clics pasen a través del canvas */
+            z-index: 5;
+        }
+        #bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 1) 100%);
+            transition: background 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen font-sans relative overflow-x-hidden select-none">
+
+    <!-- Efecto de brillo de fondo interactivo -->
+    <div id="bg-glow"></div>
+
+    <!-- Lienzos independientes para efectos de fiesta -->
+    <canvas id="confetti-canvas"></canvas>
+    <canvas id="fireworks-canvas"></canvas>
+
+    <!-- Contenido principal sobrepuesto -->
+    <div class="relative z-10 min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-950/40 via-transparent to-emerald-950/40">
+        
+        <!-- Barra de Navegación Chapina -->
+        <nav class="bg-slate-900/80 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-30">
+            <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
+                <a href="/" class="text-xl font-black tracking-wider text-emerald-400 drop-shadow-md">💙 PAPÁ 2026 💚</a>
+                <div class="flex flex-wrap gap-2 text-xs md:text-sm font-semibold">
+                    <a href="/sitios_mas_visitados" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🌐 Favoritos</a>
+                    <a href="/poncita" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🌸 Poncita</a>
+                    <a href="/poncito" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">💎 Poncito</a>
+                    <a href="/recuerdos" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">📅 Bitácora</a>
+                    <a href="/calculadora" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🧮 Calculadora</a>
+                    <a href="/notas" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">📌 Notas</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido Central -->
+        <main class="max-w-4xl mx-auto px-4 py-8 flex-grow flex flex-col items-center justify-center text-center gap-8">
+            
+            <!-- Cabecera de Fiesta -->
+            <header class="space-y-4">
+                <h1 class="text-5xl md:text-7xl font-black tracking-tight bg-gradient-to-r from-blue-300 via-emerald-300 to-green-300 bg-clip-text text-transparent drop-shadow-[0_4px_12px_rgba(52,211,153,0.3)]">
+                    ¡FELIZ DÍA DEL PADRE! 🎉
+                </h1>
+                <p class="text-xl md:text-3xl font-bold text-blue-200">
+                    Bienvenido a tu rincón ultra especial, Papá 💖
+                </p>
+                <p class="text-xs md:text-sm text-emerald-300 max-w-lg mx-auto bg-slate-900/60 p-3 rounded-xl border border-white/10 backdrop-blur-sm">
+                    ✨ ¡Toca la pantalla en cualquier espacio vacío para disparar cohetes y ver los fuegos artificiales explotar! 🎆
+                </p>
+            </header>
+
+            <!-- Tus 4 fotos reales (Sin imágenes de internet) -->
+            <section class="w-full max-w-lg bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-2xl space-y-3">
+                <h2 class="text-xs font-bold text-emerald-300 tracking-wider uppercase">📸 Momentos Especiales Con El Campeón</h2>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="overflow-hidden rounded-xl bg-slate-900/80 aspect-square border border-white/10 shadow-inner">
+                        <img src="assets/inicio_01.jpg" alt="Foto de inicio 1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="overflow-hidden rounded-xl bg-slate-900/80 aspect-square border border-white/10 shadow-inner">
+                        <img src="assets/inicio_02.jpg" alt="Foto de inicio 2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="overflow-hidden rounded-xl bg-slate-900/80 aspect-square border border-white/10 shadow-inner">
+                        <img src="assets/inicio_03.jpg" alt="Foto de inicio 3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="overflow-hidden rounded-xl bg-slate-900/80 aspect-square border border-white/10 shadow-inner">
+                        <img src="assets/inicio_04.jpg" alt="Foto de inicio 4" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Botones chileros de acción -->
+            <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md justify-center items-center z-20">
+                <!-- Botón de Video -->
+                <button id="btn-video" onclick="openVideoModal(event)" class="w-full sm:w-auto bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black px-6 py-4 rounded-xl shadow-lg hover:shadow-red-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-red-400/30 cursor-pointer">
+                    🎬 Resumen de estos años
+                </button>
+                
+                <!-- Botón Continuar -->
+                <a id="btn-continuar" href="/recuerdos" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-black px-8 py-4 rounded-xl shadow-lg hover:shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-emerald-400/30 text-center">
+                    Continuar ➡️
+                </a>
+            </div>
+
+            <!-- Dedicatoria Corta -->
+            <article class="bg-slate-900/40 backdrop-blur-md p-5 rounded-xl max-w-lg border border-white/10">
+                <p class="text-sm md:text-base leading-relaxed text-blue-100">
+                    Papá, preparé este sitio web para decirte lo muchísimo que te amo. Eres mi superhéroe favorito, mi mejor amigo y la persona que más admiro en el mundo entero. ¡Navega y descubre todo lo que hice para ti! 🏆💙
+                </p>
+            </article>
+
+        </main>
+
+        <!-- Pie de Página -->
+        <footer class="bg-slate-950 text-[10px] text-center p-4 border-t border-white/5 text-gray-500">
+            <p>Hecho con todo el amor de tu hijo que te adora con el corazón • 2026 🥇</p>
+        </footer>
+
+    </div>
+
+    <!-- REPRODUCTOR DE VIDEO (Cine flotante) -->
+    <div id="video-modal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl relative">
+            
+            <!-- Barra superior del reproductor -->
+            <div class="flex justify-between items-center p-4 border-b border-white/10 bg-slate-950">
+                <h3 class="text-sm font-bold text-emerald-400">🎞️ Resumen de estos años - Para Mi Papá</h3>
+                <button onclick="closeVideoModal(event)" class="text-gray-400 hover:text-white transition font-black text-xl px-2 cursor-pointer">&times;</button>
+            </div>
+            
+            <!-- Contenedor del video -->
+            <div class="aspect-video bg-black relative">
+                <video id="papas-video" class="w-full h-full" controls playsinline>
+                    <source src="assets/resumen.mp4" type="video/mp4">
+                    Tu teléfono no soporta reproducción directa de video.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Lógica de Animación y Efectos -->
+    <script>
+        // --- REPRODUCTOR DE VIDEO ---
+        const videoModal = document.getElementById('video-modal');
+        const papasVideo = document.getElementById('papas-video');
+
+        function openVideoModal(e) {
+            e.stopPropagation(); // Evitamos que el toque lance un fuego artificial detrás
+            videoModal.classList.remove('hidden');
+            videoModal.classList.add('flex');
+            papasVideo.play().catch(err => console.log("La reproducción requiere un toque del usuario"));
+        }
+
+        function closeVideoModal(e) {
+            if(e) e.stopPropagation();
+            videoModal.classList.remove('flex');
+            videoModal.classList.add('hidden');
+            papasVideo.pause();
+            papasVideo.currentTime = 0;
+        }
+
+        // --- LIENZOS DE DIBUJO ---
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const ctxConf = confettiCanvas.getContext('2d');
+
+        const fireworksCanvas = document.getElementById('fireworks-canvas');
+        const ctxFire = fireworksCanvas.getContext('2d');
+
+        function resize() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+            fireworksCanvas.width = window.innerWidth;
+            fireworksCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- SISTEMA DE CONFETI REALISTA (3D E INTERACTIVO) ---
+        class ConfettiParticle {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * confettiCanvas.height; // Llenar pantalla al inicio
+            }
+            reset() {
+                this.x = Math.random() * confettiCanvas.width;
+                this.y = -20;
+                this.size = Math.random() * 6 + 6;
+                this.color = `hsl(${Math.random() * 360}, 90%, 60%)`;
+                this.speedY = Math.random() * 1.5 + 2;
+                this.speedX = Math.random() * 1.5 - 0.75;
+                // Rotación 3D
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 4 + 2;
+                this.oscillationSpeed = Math.random() * 0.02 + 0.01;
+                this.angle = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.angle += this.oscillationSpeed;
+                this.x += Math.sin(this.angle) * 0.8 + this.speedX;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > confettiCanvas.height + 20) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctxConf.save();
+                ctxConf.translate(this.x, this.y);
+                ctxConf.rotate(this.rotation * Math.PI / 180);
+                ctxConf.fillStyle = this.color;
+                // Simula rotación 3D reduciendo el ancho usando coseno
+                const width = this.size * Math.cos(this.rotation * 0.05);
+                ctxConf.fillRect(-width / 2, -this.size / 2, width, this.size);
+                ctxConf.restore();
+            }
+        }
+
+        const confettiArray = [];
+        for (let i = 0; i < 75; i++) {
+            confettiArray.push(new ConfettiParticle());
+        }
+
+        // --- SISTEMA DE FUEGOS ARTIFICIALES (ESTILO REALISTA CON COHETES) ---
+        let fireworks = [];
+        let particles = [];
+
+        class Firework {
+            constructor(startX, startY, targetX, targetY) {
+                this.x = startX;
+                this.y = startY;
+                this.targetX = targetX;
+                this.targetY = targetY;
+                this.distanceToTarget = Math.hypot(targetX - startX, targetY - startY);
+                this.distanceTraveled = 0;
+                // Velocidad del cohete ascendente
+                this.speed = Math.random() * 4 + 8;
+                this.angle = Math.atan2(targetY - startY, targetX - startX);
+                this.color = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                this.trail = [];
+            }
+            update() {
+                this.trail.push({ x: this.x, y: this.y });
+                if (this.trail.length > 12) this.trail.shift();
+
+                const vx = Math.cos(this.angle) * this.speed;
+                const vy = Math.sin(this.angle) * this.speed;
+                this.x += vx;
+                this.y += vy;
+
+                this.distanceTraveled = Math.hypot(this.x - this.targetX, this.y - this.targetY);
+
+                // Si llega cerca de su destino, detona
+                if (this.y <= this.targetY || this.distanceTraveled < 15) {
+                    explode(this.targetX, this.targetY, this.color);
+                    return false;
+                }
+                return true;
+            }
+            draw() {
+                ctxFire.beginPath();
+                ctxFire.moveTo(this.x, this.y);
+                for (let i = this.trail.length - 1; i >= 0; i--) {
+                    ctxFire.lineTo(this.trail[i].x, this.trail[i].y);
+                }
+                ctxFire.strokeStyle = this.color;
+                ctxFire.lineWidth = 2.5;
+                ctxFire.stroke();
+            }
+        }
+
+        class SparkParticle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 7 + 1.5;
+                this.speedX = Math.cos(angle) * speed;
+                this.speedY = Math.sin(angle) * speed;
+                this.gravity = 0.08;
+                this.friction = 0.95; // Resistencia de aire realista
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.01;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.speedX *= this.friction;
+                this.speedY *= this.friction;
+                this.speedY += this.gravity;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= this.decay;
+                return this.alpha > 0;
+            }
+            draw() {
+                ctxFire.save();
+                ctxFire.globalAlpha = this.alpha;
+                ctxFire.beginPath();
+                ctxFire.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctxFire.fillStyle = this.color;
+                ctxFire.shadowBlur = 15;
+                ctxFire.shadowColor = this.color;
+                ctxFire.fill();
+                ctxFire.restore();
+            }
+        }
+
+        function explode(x, y, color) {
+            const count = 80;
+            for (let i = 0; i < count; i++) {
+                particles.push(new SparkParticle(x, y, color));
+            }
+            // Flash de iluminación de fondo temporal
+            const bg = document.getElementById('bg-glow');
+            bg.style.background = `radial-gradient(circle at ${x}px ${y}px, ${color.replace('hsl', 'hsla').replace(')', ', 0.25)')} 0%, rgba(15, 23, 42, 1) 80%)`;
+            setTimeout(() => {
+                bg.style.background = 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 1) 100%)';
+            }, 200);
+        }
+
+        // --- SISTEMA INTUITIVO PARA CAPTURAR TOQUES EN CUALQUIER PARTE ---
+        window.addEventListener('pointerdown', (e) => {
+            // No disparamos si se toca la barra de navegación, botones o enlaces
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('nav') || !videoModal.classList.contains('hidden')) {
+                return;
+            }
+            // Disparar cohete desde abajo hacia donde se tocó
+            fireworks.push(new Firework(e.clientX, window.innerHeight, e.clientX, e.clientY));
+        });
+
+        // Cohetes automáticos lentos en el fondo
+        setInterval(() => {
+            if (document.hidden || !videoModal.classList.contains('hidden')) return;
+            const x = Math.random() * window.innerWidth;
+            const targetY = Math.random() * (window.innerHeight * 0.45) + (window.innerHeight * 0.1);
+            fireworks.push(new Firework(x, window.innerHeight, x, targetY));
+        }, 3200);
+
+        // --- BUCLE DE ANIMACIÓN GLOBAL ---
+        function animate() {
+            // 1. Limpiar y dibujar confeti
+            ctxConf.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiArray.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // 2. Dibujar estela de fuegos artificiales difuminada
+            ctxFire.fillStyle = 'rgba(15, 23, 42, 0.16)'; // Crea estelas realistas de luz
+            ctxFire.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+
+            // Actualizar cohetes
+            fireworks = fireworks.filter(f => f.update());
+            fireworks.forEach(f => f.draw());
+
+            // Actualizar partículas de la explosión
+            particles = particles.filter(p => p.update());
+            particles.forEach(p => p.draw());
+
+            requestAnimationFrame(animate);
+        }
+
+        window.onload = function() {
+            animate();
+        };
+    </script>
+</body>
+</html>
