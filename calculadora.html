@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -42,17 +41,19 @@
     <!-- Contenido sobrepuesto -->
     <div class="relative z-10 min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-950/40 via-transparent to-emerald-950/40">
         
-        <!-- Barra de Navegación Chapina -->
-        <nav class="bg-slate-900/80 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-30">
-            <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
+        <!-- BARRA DE NAVEGACIÓN UNIVERSAL -->
+        <nav class="bg-slate-900/90 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-50">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
                 <a href="/" class="text-xl font-black tracking-wider text-emerald-400 drop-shadow-md">💙 PAPÁ 2026 💚</a>
-                <div class="flex flex-wrap gap-2 text-xs md:text-sm font-semibold">
-                    <a href="/sitios_mas_visitados" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🌐 Favoritos</a>
-                    <a href="/poncita" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🌸 Poncita</a>
-                    <a href="/poncito" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">💎 Poncito</a>
-                    <a href="/recuerdos" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">📅 Bitácora</a>
-                    <a href="/calculadora" class="text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/30">🧮 Calculadora</a>
-                    <a href="/notas" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">📌 Notas</a>
+                <div class="flex flex-wrap justify-center gap-2 text-[10px] md:text-xs font-semibold">
+                    <a href="/" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🏠 Inicio</a>
+                    <a href="sitios_mas_visitados.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🌐 Favoritos</a>
+                    <a href="poncita.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🌸 Poncita</a>
+                    <a href="poncito.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">💎 Poncito</a>
+                    <a href="recuerdos.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">📅 Bitácora</a>
+                    <a href="calculadora.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🧮 Calculadora</a>
+                    <a href="notas.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">📌 Notas</a>
+                    <a href="traductor.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🌎 Traductor</a>
                 </div>
             </div>
         </nav>
@@ -125,7 +126,7 @@
                 <a href="/" class="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white px-6 py-3 rounded-xl border border-white/10 transition text-sm font-bold text-center active:scale-95">
                     ⬅️ Regresar al Inicio
                 </a>
-                <a href="/notas" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-black px-6 py-3 rounded-xl shadow-lg hover:shadow-emerald-500/20 active:scale-95 transition-all text-center border border-emerald-400/30">
+                <a href="notas.html" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-black px-6 py-3 rounded-xl shadow-lg hover:shadow-emerald-500/20 active:scale-95 transition-all text-center border border-emerald-400/30">
                     Ir a las Notas 📌
                 </a>
             </div>
@@ -346,6 +347,7 @@
             const x = Math.random() * window.innerWidth;
             const targetY = Math.random() * (window.innerHeight * 0.45) + (window.innerHeight * 0.1);
             fireworks.push(new Firework(x, window.innerHeight, x, targetY));
+        }, 4000);
 
         // --- ANIMACIÓN ---
         function animate() {
