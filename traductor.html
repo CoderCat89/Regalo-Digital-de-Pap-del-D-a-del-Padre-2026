@@ -1,55 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Traductor Inteligente de Papá</title>
-    <!-- Tailwind CSS para un diseño ultra moderno, responsivo y nítido en el cel -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Capas de fondo para que los efectos de fiesta no estorben la escritura */
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 5;
-        }
-        #bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 1) 100%);
-        }
+        canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 5; }
+        #bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.08) 0%, rgba(15,23,42,1) 100%); transition: background 0.3s ease; }
     </style>
 </head>
 <body class="bg-slate-950 text-white min-h-screen font-sans relative overflow-x-hidden select-none">
-
-    <!-- Iluminación ambiental interactiva de fondo -->
     <div id="bg-glow"></div>
-
-    <!-- Lienzos de la fiesta chapina (Cohetes y confeti 3D) -->
     <canvas id="confetti-canvas"></canvas>
     <canvas id="fireworks-canvas"></canvas>
 
-    <!-- Contenido sobrepuesto -->
     <div class="relative z-10 min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-950/40 via-transparent to-emerald-950/40">
-        
-        <!-- BARRA DE NAVEGACIÓN CHAPINA COMPLETA (TODAS LAS SECCIONES) -->
+        <!-- BARRA DE NAVEGACIÓN UNIVERSAL -->
         <nav class="bg-slate-900/90 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-50">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                <a href="index.html" class="text-xl font-black tracking-wider text-emerald-400 drop-shadow-md">💙 PAPÁ 2026 💚</a>
+                <a href="/" class="text-xl font-black tracking-wider text-emerald-400 drop-shadow-md">💙 PAPÁ 2026 💚</a>
                 <div class="flex flex-wrap justify-center gap-2 text-[10px] md:text-xs font-semibold">
-                    <a href="index.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🏠 Inicio</a>
+                    <a href="/" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🏠 Inicio</a>
                     <a href="sitios_mas_visitados.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🌐 Favoritos</a>
                     <a href="poncita.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🌸 Poncita</a>
                     <a href="poncito.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">💎 Poncito</a>
-                    <a href="recuerdos.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">📅 Bitácora</a>
+                    <a href="recuerdos_parte1.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">📅 Bitácora</a>
                     <a href="calculadora.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🧮 Calculadora</a>
                     <a href="notas.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">📌 Notas</a>
                     <a href="traductor.html" class="text-emerald-400 bg-emerald-500/10 px-2.5 py-1.5 rounded-lg border border-emerald-500/30">🌎 Traductor</a>
@@ -57,29 +33,18 @@
             </div>
         </nav>
 
-        <!-- Contenedor del Traductor de Párrafos -->
         <main class="max-w-3xl mx-auto px-4 py-8 flex-grow flex flex-col items-center justify-center text-center gap-6 w-full">
-            
-            <!-- Cabecera de la Página -->
             <header class="space-y-1">
-                <h1 class="text-3xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent drop-shadow-lg animate-pulse">
-                    TRADUCTOR UNIVERSAL 🌎
-                </h1>
-                <p class="text-sm md:text-lg text-blue-200 font-medium">
-                    ¡Escribe o pega cualquier frase y tradúcela al instante sin complicaciones, Papá!
-                </p>
+                <h1 class="text-3xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent drop-shadow-lg animate-pulse">TRADUCTOR UNIVERSAL 🌎</h1>
+                <p class="text-sm md:text-lg text-blue-200 font-medium">¡Escribe o pega cualquier frase y tradúcela al instante sin complicaciones, Papá!</p>
             </header>
 
-            <!-- Caja Principal del Traductor -->
             <section class="w-full max-w-xl bg-slate-900/80 backdrop-blur-md p-5 rounded-3xl border border-white/10 shadow-2xl space-y-4 z-20 flex flex-col text-left">
-                
-                <!-- Área de Entrada de Texto -->
                 <div class="space-y-1.5">
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-wider block">✍️ Escribe tu frase aquí:</label>
                     <textarea id="texto-origen" rows="4" placeholder="Escribe lo que quieras traducir..." class="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-400 resize-none font-medium placeholder-gray-600 select-text"></textarea>
                 </div>
 
-                <!-- Selector de Idioma Destino -->
                 <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
                     <div class="w-full sm:w-auto">
                         <label class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">🌎 Idioma destino:</label>
@@ -89,71 +54,48 @@
                             <option value="fr">🇫🇷 Français (Francés)</option>
                             <option value="de">🇩🇪 Deutsch (Alemán)</option>
                             <option value="zh-CN">🇨🇳 中文 (Chino)</option>
-                            <option value="pt">🇵🇹 Português (Português)</option>
+                            <option value="pt">🇵🇹 Português (Portugués)</option>
                         </select>
                     </div>
-
-                    <!-- Botón de Traducir -->
-                    <button onclick="traducirTextoReal()" class="w-full sm:w-auto mt-4 sm:mt-0 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-black px-6 py-3 rounded-xl shadow-lg active:scale-95 transition-all cursor-pointer text-sm">
-                        ⚡ Traducir Frase
-                    </button>
+                    <button onclick="traducirTextoReal()" class="w-full sm:w-auto mt-4 sm:mt-0 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-black px-6 py-3 rounded-xl shadow-lg active:scale-95 transition-all cursor-pointer text-sm">⚡ Traducir Frase</button>
                 </div>
 
-                <!-- Área de Resultado de la Traducción -->
                 <div class="space-y-1.5 pt-2 border-t border-white/5">
                     <label class="text-xs font-bold text-emerald-400 uppercase tracking-wider block">✨ Traducción obtenida:</label>
                     <div id="texto-resultado" class="w-full min-h-[80px] bg-black/60 border border-emerald-500/10 rounded-xl p-3 text-sm text-emerald-300 font-medium select-text whitespace-pre-wrap">Aquí aparecerá tu traducción lista para leer o copiar...</div>
                 </div>
-
             </section>
 
-            <!-- Mensaje de Estado / Notificación -->
             <div id="status-message" class="hidden text-xs font-bold text-rose-400 bg-rose-500/10 px-4 py-2 rounded-xl border border-rose-500/20 max-w-sm"></div>
-
         </main>
 
-        <!-- Pie de Página -->
         <footer class="bg-slate-950 text-[10px] text-center p-4 border-t border-white/5 text-gray-500">
             <p>Hecho con todo el amor de tu hijo que te adora con el corazón • 2026 🥇</p>
         </footer>
-
     </div>
 
-    <!-- Script de Traducción Real en vivo y Efectos de Cohetes -->
     <script>
-        // --- MOTOR DE TRADUCCIÓN REAL SIN LLAVES DE API NI IA ---
         async function traducirTextoReal() {
             const origenInput = document.getElementById('texto-origen');
             const resultadoDiv = document.getElementById('texto-resultado');
             const statusDiv = document.getElementById('status-message');
             const targetLang = document.getElementById('idioma-destino').value;
-
             const textoOriginal = origenInput.value.trim();
-
             if (!textoOriginal) {
                 statusDiv.innerText = "Por favor escribe algo primero, Papá. 😉";
                 statusDiv.classList.remove('hidden');
                 setTimeout(() => statusDiv.classList.add('hidden'), 3000);
                 return;
             }
-
             resultadoDiv.innerText = "Traduciendo al instante... ⏳";
             statusDiv.classList.add('hidden');
-
             try {
-                // Truco de conexión directa al servidor de traducción libre (Google Translate single API)
                 const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(textoOriginal)}`;
-                
                 const res = await fetch(url);
                 if (!res.ok) throw new Error("Fallo en la red");
-                
                 const data = await res.json();
-                
                 let traduccionFinal = "";
-                data[0].forEach(linea => {
-                    if (linea[0]) traduccionFinal += linea[0];
-                });
-
+                data[0].forEach(linea => { if (linea[0]) traduccionFinal += linea[0]; });
                 resultadoDiv.innerText = traduccionFinal;
             } catch (error) {
                 console.error(error);
@@ -161,10 +103,9 @@
             }
         }
 
-        // --- LIENZOS DE ANIMACIÓN ---
+        // ----- EFECTOS DE CONFETI Y FUEGOS ARTIFICIALES (COMPLETO) -----
         const confettiCanvas = document.getElementById('confetti-canvas');
         const ctxConf = confettiCanvas.getContext('2d');
-
         const fireworksCanvas = document.getElementById('fireworks-canvas');
         const ctxFire = fireworksCanvas.getContext('2d');
 
@@ -177,7 +118,6 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // --- SISTEMA DE CONFETI REALISTA (3D) ---
         class ConfettiParticle {
             constructor() {
                 this.reset();
@@ -200,10 +140,7 @@
                 this.angle += this.oscillationSpeed;
                 this.x += Math.sin(this.angle) * 0.8 + this.speedX;
                 this.rotation += this.rotationSpeed;
-
-                if (this.y > confettiCanvas.height + 20) {
-                    this.reset();
-                }
+                if (this.y > confettiCanvas.height + 20) this.reset();
             }
             draw() {
                 ctxConf.save();
@@ -217,11 +154,8 @@
         }
 
         const confettiArray = [];
-        for (let i = 0; i < 40; i++) {
-            confettiArray.push(new ConfettiParticle());
-        }
+        for (let i = 0; i < 40; i++) confettiArray.push(new ConfettiParticle());
 
-        // --- SISTEMA DE FUEGOS ARTIFICIALES (ESTILO COHETE) ---
         let fireworks = [];
         let particles = [];
 
@@ -239,10 +173,8 @@
             update() {
                 this.trail.push({ x: this.x, y: this.y });
                 if (this.trail.length > 10) this.trail.shift();
-
                 this.x += Math.cos(this.angle) * this.speed;
                 this.y += Math.sin(this.angle) * this.speed;
-
                 if (this.y <= this.targetY) {
                     explode(this.targetX, this.targetY, this.color);
                     return false;
@@ -299,13 +231,11 @@
         }
 
         function explode(x, y, color) {
-            for (let i = 0; i < 50; i++) {
-                particles.push(new SparkParticle(x, y, color));
-            }
+            for (let i = 0; i < 50; i++) particles.push(new SparkParticle(x, y, color));
             const bg = document.getElementById('bg-glow');
-            bg.style.background = `radial-gradient(circle at ${x}px ${y}px, ${color.replace('hsl', 'hsla').replace(')', ', 0.20)')} 0%, rgba(15, 23, 42, 1) 80%)`;
+            bg.style.background = `radial-gradient(circle at ${x}px ${y}px, ${color.replace('hsl', 'hsla').replace(')', ', 0.20)')} 0%, rgba(15,23,42,1) 80%)`;
             setTimeout(() => {
-                bg.style.background = 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 1) 100%)';
+                bg.style.background = 'radial-gradient(circle at 50% 50%, rgba(16,185,129,0.08) 0%, rgba(15,23,42,1) 100%)';
             }, 250);
         }
 
@@ -323,24 +253,19 @@
 
         function animate() {
             ctxConf.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-            confettiArray.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
-            ctxFire.fillStyle = 'rgba(15, 23, 42, 0.16)';
+            confettiArray.forEach(p => { p.update(); p.draw(); });
+            ctxFire.fillStyle = 'rgba(15,23,42,0.16)';
             ctxFire.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
-
             fireworks = fireworks.filter(f => f.update());
             fireworks.forEach(f => f.draw());
-
             particles = particles.filter(p => p.update());
             particles.forEach(p => p.draw());
-
             requestAnimationFrame(animate);
         }
 
-        window.onload = animate;
+        window.onload = function() {
+            animate();
+        };
     </script>
 </body>
-      </html>
+</html>
