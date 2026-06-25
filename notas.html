@@ -6,42 +6,12 @@
     <title>Notas de Cariño para Papá</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 5;
-        }
-        #bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.08) 0%, rgba(15,23,42,1) 100%);
-            transition: background 0.3s ease;
-        }
-        #corkboard {
-            position: relative;
-            background: rgba(15,23,42,0.6);
-            border: 4px dashed rgba(52,211,153,0.2);
-            min-height: 550px;
-        }
-        .post-it {
-            position: absolute;
-            cursor: grab;
-            user-select: none;
-            touch-action: none;
-        }
-        .post-it:active {
-            cursor: grabbing;
-            transform: scale(1.05) rotate(0deg) !important;
-            z-index: 50 !important;
-        }
+        canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 5; }
+        #bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.08) 0%, rgba(15,23,42,1) 100%); transition: background 0.3s ease; }
+        #corkboard { position: relative; background: rgba(15,23,42,0.6); border: 4px dashed rgba(52,211,153,0.2); min-height: 550px; }
+        .post-it { position: absolute; cursor: grab; user-select: none; touch-action: none; }
+        .post-it:active { cursor: grabbing; transform: scale(1.05) rotate(0deg) !important; z-index: 50 !important; }
+        #status-msg { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,0.95); padding: 10px 20px; border-radius: 12px; border: 1px solid #fbbf24; color: #fbbf24; font-size: 12px; font-weight: bold; z-index: 999; display: none; backdrop-filter: blur(10px); max-width: 90%; text-align: center; }
     </style>
 </head>
 <body class="bg-slate-950 text-white min-h-screen font-sans relative overflow-x-hidden select-none">
@@ -50,12 +20,12 @@
     <canvas id="fireworks-canvas"></canvas>
 
     <div class="relative z-10 min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-950/40 via-transparent to-emerald-950/40">
-        <!-- BARRA DE NAVEGACIÓN UNIVERSAL -->
+        <!-- BARRA DE NAVEGACIÓN CORREGIDA -->
         <nav class="bg-slate-900/90 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-50">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                <a href="/" class="text-xl font-black tracking-wider text-emerald-400 drop-shadow-md">💙 PAPÁ 2026 💚</a>
+                <a href="index.html" class="text-xl font-black tracking-wider text-emerald-400 drop-shadow-md">💙 PAPÁ 2026 💚</a>
                 <div class="flex flex-wrap justify-center gap-2 text-[10px] md:text-xs font-semibold">
-                    <a href="/" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🏠 Inicio</a>
+                    <a href="index.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🏠 Inicio</a>
                     <a href="sitios_mas_visitados.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🌐 Favoritos</a>
                     <a href="poncita.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🌸 Poncita</a>
                     <a href="poncito.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">💎 Poncito</a>
@@ -82,11 +52,11 @@
             <section id="corkboard" class="w-full rounded-3xl overflow-hidden shadow-2xl z-20"></section>
 
             <p class="text-[11px] text-emerald-300/80 bg-slate-900/40 px-4 py-2 rounded-lg border border-white/5 max-w-md z-20">
-                💡 Todas las notas se guardan en la nube y se sincronizan automáticamente.
+                💡 Tus notas se guardan en la nube y también en tu teléfono por si acaso.
             </p>
 
             <div class="z-20">
-                <a href="/" class="bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white px-6 py-3 rounded-xl border border-white/10 transition text-sm font-bold shadow-md active:scale-95">⬅️ Regresar al Inicio</a>
+                <a href="index.html" class="bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white px-6 py-3 rounded-xl border border-white/10 transition text-sm font-bold shadow-md active:scale-95">⬅️ Regresar al Inicio</a>
             </div>
         </main>
 
@@ -94,6 +64,9 @@
             <p>Hecho con todo el amor de tu hijo que te adora con el corazón • 2026 🥇</p>
         </footer>
     </div>
+
+    <!-- MENSAJE DE ESTADO -->
+    <div id="status-msg"></div>
 
     <!-- MODAL PARA NUEVA NOTA -->
     <div id="note-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
@@ -119,215 +92,303 @@
 
     <!-- Toast de guardado -->
     <div id="toast-message" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 border border-emerald-500/30 px-4 py-2 rounded-xl text-xs text-emerald-400 font-bold shadow-lg z-50 hidden opacity-0 transition-all duration-300">
-        📝 ¡Nota guardada en la nube!
-    </div>
-
-    <!-- 🔥 FIREBASE SDK (modular) -->
-    <script type="importmap">
-        {
-            "imports": {
-                "firebase/app": "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js",
-                "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js",
-                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"
-            }
+        📝 ¡Nota guardada!
+                             </div>
+     <!-- FIREBASE SDK y lógica completa -->
+<script type="importmap">
+    {
+        "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js",
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js",
+            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"
         }
-    </script>
+    }
+</script>
 
-    <script type="module">
-        // ----- CONFIGURACIÓN DE FIREBASE -----
-        import { initializeApp } from "firebase/app";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
-        import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
+<script type="module">
+    // ----- CONFIGURACIÓN DE FIREBASE -----
+    import { initializeApp } from "firebase/app";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
+    import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBZAKQZHiXPoJ0WxraPUxx6jVJSJuB9Oz4",
-            authDomain: "regalo-digital-de-papa.firebaseapp.com",
-            projectId: "regalo-digital-de-papa",
-            storageBucket: "regalo-digital-de-papa.firebasestorage.app",
-            messagingSenderId: "81896951999",
-            appId: "1:81896951999:web:708f737cdc880944cc760a"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyBZAKQZHiXPoJ0WxraPUxx6jVJSJuB9Oz4",
+        authDomain: "regalo-digital-de-papa.firebaseapp.com",
+        projectId: "regalo-digital-de-papa",
+        storageBucket: "regalo-digital-de-papa.firebasestorage.app",
+        messagingSenderId: "81896951999",
+        appId: "1:81896951999:web:708f737cdc880944cc760a"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        // Variables globales (accesibles desde funciones no modulares)
-        let currentUserUid = null;
-        let notesData = [];
+    // Variables globales
+    let currentUserUid = null;
+    let notesData = [];
+    let usingLocalStorage = false;
+    let unsubscribe = null;
 
-        const board = document.getElementById('corkboard');
-        const modal = document.getElementById('note-modal');
-        const textInput = document.getElementById('note-text-input');
+    const board = document.getElementById('corkboard');
+    const modal = document.getElementById('note-modal');
+    const textInput = document.getElementById('note-text-input');
+    const statusMsg = document.getElementById('status-msg');
+    // ----- MOSTRAR MENSAJES DE ESTADO -----
+function showStatus(msg, isError = false, duration = 4000) {
+    statusMsg.textContent = msg;
+    statusMsg.style.display = 'block';
+    statusMsg.style.borderColor = isError ? '#ef4444' : '#fbbf24';
+    statusMsg.style.color = isError ? '#ef4444' : '#fbbf24';
+    clearTimeout(statusMsg._timeout);
+    statusMsg._timeout = setTimeout(() => {
+        statusMsg.style.display = 'none';
+    }, duration);
+}
 
-        // ----- AUTENTICACIÓN ANÓNIMA -----
-        signInAnonymously(auth).catch(error => console.error("Error en auth anónima:", error));
+// ----- LOCALSTORAGE (RESPALDO) -----
+function loadFromLocalStorage() {
+    const stored = localStorage.getItem('papas_notes_2026');
+    if (stored) {
+        try {
+            notesData = JSON.parse(stored);
+        } catch {
+            notesData = [];
+        }
+    } else {
+        notesData = [
+            { id: 'local1', text: "¡Te amo con todo mi corazón, Papá! Eres mi gran superhéroe 💙✨", color: "bg-yellow-200 text-slate-900 border-yellow-300", x: 10, y: 20 },
+            { id: 'local2', text: "Me gusta muchísimo que juegues conmigo y me cargues. ¡Nadie se divierte tanto como nosotros! 🧸🚀", color: "bg-sky-200 text-slate-900 border-sky-300", x: 50, y: 60 },
+            { id: 'local3', text: "Te extraño muchísimo desde Guatemala 😢😢😢 ¡Te mando un abrazo fuerte de oso!", color: "bg-rose-200 text-slate-900 border-rose-300", x: 20, y: 190 },
+            { id: 'local4', text: "¡Feliz Día del Padre 2026! Eres el mero campeón, Papá 🥇🏆", color: "bg-emerald-200 text-slate-900 border-emerald-300", x: 55, y: 240 }
+        ];
+        localStorage.setItem('papas_notes_2026', JSON.stringify(notesData));
+    }
+    renderNotes();
+}
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUserUid = user.uid;
-                console.log("Usuario autenticado:", currentUserUid);
-                listenNotes();
-            } else {
-                console.log("No autenticado");
-            }
-        });
+function saveToLocalStorage() {
+    localStorage.setItem('papas_notes_2026', JSON.stringify(notesData));
+}
 
-        // ----- FUNCIONES DE FIRESTORE -----
-        function listenNotes() {
-            if (!currentUserUid) return;
-            const notesRef = collection(db, "notas");
-            const q = query(notesRef, where("uid", "==", currentUserUid), orderBy("createdAt", "asc"));
+// ----- RENDERIZAR NOTAS EN EL TABLERO -----
+function renderNotes() {
+    board.innerHTML = '';
+    notesData.forEach((note) => {
+        const card = document.createElement('div');
+        card.id = `note-${note.id}`;
+        card.className = `post-it ${note.color} p-4 rounded-xl shadow-xl border w-44 min-h-[110px] flex flex-col justify-between text-left transition-transform duration-100`;
+        card.style.left = `${note.x || 10}%`;
+        card.style.top = `${note.y || 20}px`;
+        const randomRot = (Math.floor(Math.random() * 3) - 1) * 2;
+        card.style.transform = `rotate(${randomRot}deg)`;
 
-            onSnapshot(q, (snapshot) => {
-                notesData = [];
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    notesData.push({
-                        id: docSnap.id,
-                        text: data.text,
-                        color: data.color || 'bg-yellow-200 text-slate-900 border-yellow-300',
-                        x: data.x || 10,
-                        y: data.y || 20
+        card.innerHTML = `
+            <p class="text-[11px] font-semibold leading-relaxed break-words pr-2 select-text">${note.text}</p>
+            <div class="flex justify-end gap-1.5 mt-2 border-t border-black/5 pt-1.5 select-none">
+                <button onclick="window.editNote('${note.id}')" class="text-[10px] text-slate-700 hover:text-black font-bold cursor-pointer">✏️</button>
+                <button onclick="window.deleteNote('${note.id}')" class="text-[10px] text-red-700 hover:text-red-900 font-bold cursor-pointer">❌</button>
+            </div>
+        `;
+        makeElementDraggable(card, note);
+        board.appendChild(card);
+    });
+}
+// ----- ARRASTRE (TÁCTIL Y MOUSE) -----
+function makeElementDraggable(elmnt, noteObj) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    elmnt.addEventListener('mousedown', dragMouseDown);
+    elmnt.addEventListener('touchstart', dragTouchStart, { passive: false });
+
+    function dragMouseDown(e) {
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.addEventListener('mouseup', closeDragElement);
+        document.addEventListener('mousemove', elementDrag);
+    }
+    function dragTouchStart(e) {
+        const touch = e.touches[0];
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        document.addEventListener('touchend', closeDragElement);
+        document.addEventListener('touchmove', elementTouchDrag, { passive: false });
+    }
+    function elementDrag(e) {
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        updatePosition();
+    }
+    function elementTouchDrag(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        pos1 = pos3 - touch.clientX;
+        pos2 = pos4 - touch.clientY;
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        updatePosition();
+    }
+    function updatePosition() {
+        let newY = elmnt.offsetTop - pos2;
+        let newLeftPixels = elmnt.offsetLeft - pos1;
+        if (newY < 5) newY = 5;
+        if (newY > board.clientHeight - elmnt.clientHeight - 5) newY = board.clientHeight - elmnt.clientHeight - 5;
+        const maxLeftPixels = board.clientWidth - elmnt.clientWidth - 5;
+        if (newLeftPixels < 5) newLeftPixels = 5;
+        if (newLeftPixels > maxLeftPixels) newLeftPixels = maxLeftPixels;
+        const leftPercent = (newLeftPixels / board.clientWidth) * 100;
+        elmnt.style.top = `${newY}px`;
+        elmnt.style.left = `${leftPercent}%`;
+        noteObj.x = leftPercent;
+        noteObj.y = newY;
+        if (usingLocalStorage) {
+            saveToLocalStorage();
+        } else if (noteObj.id && !noteObj.id.startsWith('local')) {
+            updateNoteInFirestore(noteObj.id, { x: leftPercent, y: newY });
+        }
+    }
+    function closeDragElement() {
+        document.removeEventListener('mouseup', closeDragElement);
+        document.removeEventListener('mousemove', elementDrag);
+        document.removeEventListener('touchend', closeDragElement);
+        document.removeEventListener('touchmove', elementTouchDrag);
+    }
+}
+
+// ----- FIRESTORE (LECTURA Y ESCRITURA) -----
+function listenToFirestore() {
+    if (!currentUserUid) return;
+    if (unsubscribe) unsubscribe();
+
+    const notesRef = collection(db, "notas");
+    const q = query(notesRef, where("uid", "==", currentUserUid), orderBy("createdAt", "asc"));
+
+    unsubscribe = onSnapshot(q, (snapshot) => {
+        if (snapshot.empty) {
+            const stored = localStorage.getItem('papas_notes_2026');
+            if (stored) {
+                const localNotes = JSON.parse(stored);
+                if (localNotes.length > 0) {
+                    showStatus("📦 Migrando notas de localStorage a la nube...", false, 4000);
+                    localNotes.forEach(async (note) => {
+                        try {
+                            await addDoc(collection(db, "notas"), {
+                                uid: currentUserUid,
+                                text: note.text,
+                                color: note.color || 'bg-yellow-200 text-slate-900 border-yellow-300',
+                                x: note.x || 10,
+                                y: note.y || 20,
+                                createdAt: new Date()
+                            });
+                        } catch (e) {
+                            console.error("Error migrando nota:", e);
+                        }
                     });
-                });
-                renderNotes();
-            }, (error) => {
-                console.error("Error en onSnapshot:", error);
-            });
-        }
-
-        async function addNoteToFirestore(note) {
-            if (!currentUserUid) return;
-            try {
-                await addDoc(collection(db, "notas"), {
-                    uid: currentUserUid,
-                    text: note.text,
-                    color: note.color,
-                    x: note.x,
-                    y: note.y,
-                    createdAt: new Date()
-                });
-                showToast("📝 ¡Nota guardada en la nube!");
-            } catch (e) {
-                console.error("Error al agregar nota:", e);
-                showToast("❌ Error al guardar");
-            }
-        }
-
-        async function updateNoteInFirestore(id, updates) {
-            if (!currentUserUid) return;
-            try {
-                const ref = doc(db, "notas", id);
-                await updateDoc(ref, updates);
-                showToast("✏️ Nota actualizada");
-            } catch (e) {
-                console.error("Error al actualizar:", e);
-                showToast("❌ Error al actualizar");
-            }
-        }
-
-        async function deleteNoteFromFirestore(id) {
-            if (!currentUserUid) return;
-            try {
-                await deleteDoc(doc(db, "notas", id));
-                showToast("🗑️ Nota eliminada");
-            } catch (e) {
-                console.error("Error al eliminar:", e);
-                showToast("❌ Error al eliminar");
-            }
-        }
-
-        // ----- RENDERIZADO DE NOTAS -----
-        function renderNotes() {
-            board.innerHTML = '';
-            notesData.forEach((note) => {
-                const card = document.createElement('div');
-                card.id = `note-${note.id}`;
-                card.className = `post-it ${note.color} p-4 rounded-xl shadow-xl border w-44 min-h-[110px] flex flex-col justify-between text-left transition-transform duration-100`;
-                card.style.left = `${note.x}%`;
-                card.style.top = `${note.y}px`;
-                const randomRot = (parseInt(note.id.slice(-1)) % 2 === 0 ? 1 : -1) * (parseInt(note.id.slice(-1)) % 5 + 1);
-                card.style.transform = `rotate(${randomRot}deg)`;
-
-                card.innerHTML = `
-                    <p class="text-[11px] font-semibold leading-relaxed break-words pr-2 select-text">${note.text}</p>
-                    <div class="flex justify-end gap-1.5 mt-2 border-t border-black/5 pt-1.5 select-none">
-                        <button onclick="window.editNote('${note.id}')" class="text-[10px] text-slate-700 hover:text-black font-bold cursor-pointer">✏️</button>
-                        <button onclick="window.deleteNote('${note.id}')" class="text-[10px] text-red-700 hover:text-red-900 font-bold cursor-pointer">❌</button>
-                    </div>
-                `;
-                makeElementDraggable(card, note);
-                board.appendChild(card);
-            });
-        }
-
-        // ----- ARRASTRE -----
-        function makeElementDraggable(elmnt, noteObj) {
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            elmnt.addEventListener('mousedown', dragMouseDown);
-            elmnt.addEventListener('touchstart', dragTouchStart, { passive: false });
-
-            function dragMouseDown(e) {
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.addEventListener('mouseup', closeDragElement);
-                document.addEventListener('mousemove', elementDrag);
-            }
-            function dragTouchStart(e) {
-                const touch = e.touches[0];
-                pos3 = touch.clientX;
-                pos4 = touch.clientY;
-                document.addEventListener('touchend', closeDragElement);
-                document.addEventListener('touchmove', elementTouchDrag, { passive: false });
-            }
-            function elementDrag(e) {
-                e.preventDefault();
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                updatePosition();
-            }
-            function elementTouchDrag(e) {
-                e.preventDefault();
-                const touch = e.touches[0];
-                pos1 = pos3 - touch.clientX;
-                pos2 = pos4 - touch.clientY;
-                pos3 = touch.clientX;
-                pos4 = touch.clientY;
-                updatePosition();
-            }
-            function updatePosition() {
-                let newY = elmnt.offsetTop - pos2;
-                let newLeftPixels = elmnt.offsetLeft - pos1;
-                if (newY < 5) newY = 5;
-                if (newY > board.clientHeight - elmnt.clientHeight - 5) newY = board.clientHeight - elmnt.clientHeight - 5;
-                const maxLeftPixels = board.clientWidth - elmnt.clientWidth - 5;
-                if (newLeftPixels < 5) newLeftPixels = 5;
-                if (newLeftPixels > maxLeftPixels) newLeftPixels = maxLeftPixels;
-                const leftPercent = (newLeftPixels / board.clientWidth) * 100;
-                elmnt.style.top = `${newY}px`;
-                elmnt.style.left = `${leftPercent}%`;
-                noteObj.x = leftPercent;
-                noteObj.y = newY;
-                if (noteObj.id) {
-                    updateNoteInFirestore(noteObj.id, { x: leftPercent, y: newY });
+                    localStorage.removeItem('papas_notes_2026');
+                    setTimeout(() => {
+                        showStatus("✅ Notas migradas a la nube", false, 3000);
+                    }, 2000);
                 }
             }
-            function closeDragElement() {
-                document.removeEventListener('mouseup', closeDragElement);
-                document.removeEventListener('mousemove', elementDrag);
-                document.removeEventListener('touchend', closeDragElement);
-                document.removeEventListener('touchmove', elementTouchDrag);
-            }
+            return;
         }
 
-        // ----- MODAL Y ACCIONES -----
-        let selectedColorClass = 'bg-yellow-200 text-slate-900 border-yellow-300';
-        let editingNoteId = null;
+        usingLocalStorage = false;
+        notesData = [];
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            notesData.push({
+                id: docSnap.id,
+                text: data.text,
+                color: data.color || 'bg-yellow-200 text-slate-900 border-yellow-300',
+                x: data.x || 10,
+                y: data.y || 20
+            });
+        });
+        renderNotes();
+        showStatus("✅ Sincronizado con la nube", false, 2000);
+        console.log("Notas cargadas desde Firestore:", notesData);
+    }, (error) => {
+        console.error("Error en onSnapshot:", error);
+        if (error.code === 'permission-denied') {
+            showStatus("⚠️ Error de permisos. Usando localStorage.", true, 5000);
+        } else {
+            showStatus("⚠️ Error de conexión: " + error.message, true, 5000);
+        }
+        usingLocalStorage = true;
+        loadFromLocalStorage();
+    });
+}
 
+async function addNoteToFirestore(note) {
+    if (!currentUserUid) return null;
+    try {
+        const docRef = await addDoc(collection(db, "notas"), {
+            uid: currentUserUid,
+            text: note.text,
+            color: note.color,
+            x: note.x,
+            y: note.y,
+            createdAt: new Date()
+        });
+        return docRef.id;
+    } catch (e) {
+        console.error("Error al guardar en Firestore:", e);
+        return null;
+    }
+}
+
+async function updateNoteInFirestore(id, updates) {
+    if (!currentUserUid) return;
+    try {
+        await updateDoc(doc(db, "notas", id), updates);
+    } catch (e) {
+        console.error("Error al actualizar:", e);
+    }
+}
+
+async function deleteNoteFromFirestore(id) {
+    if (!currentUserUid) return;
+    try {
+        await deleteDoc(doc(db, "notas", id));
+    } catch (e) {
+        console.error("Error al eliminar:", e);
+    }
+}
+
+// ----- AUTENTICACIÓN -----
+signInAnonymously(auth).catch(error => {
+    console.error("Error en auth anónima:", error);
+    showStatus("⚠️ No se pudo conectar a Firebase. Usando el teléfono.", true, 5000);
+    usingLocalStorage = true;
+    loadFromLocalStorage();
+});
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        currentUserUid = user.uid;
+        console.log("Usuario autenticado UID:", currentUserUid);
+        usingLocalStorage = false;
+        listenToFirestore();
+    } else {
+        console.log("No autenticado, usando localStorage");
+        usingLocalStorage = true;
+        loadFromLocalStorage();
+    }
+});
+
+// Si después de 5 segundos no hay Firebase, usar localStorage
+setTimeout(() => {
+    if (!currentUserUid && !usingLocalStorage) {
+        usingLocalStorage = true;
+        loadFromLocalStorage();
+        showStatus("⏳ Firebase no respondió. Usando el teléfono.", false, 4000);
+    }
+}, 5000);
+            // ----- FUNCIONES GLOBALES (PARA LOS BOTONES DEL HTML) -----
         window.showNoteModal = function() {
             editingNoteId = null;
             document.getElementById('modal-title').innerText = '📝 Escribir Nota para Papá';
@@ -341,6 +402,9 @@
             modal.classList.remove('flex');
             modal.classList.add('hidden');
         };
+
+        let selectedColorClass = 'bg-yellow-200 text-slate-900 border-yellow-300';
+        let editingNoteId = null;
 
         window.selectColor = function(colorClass) {
             selectedColorClass = colorClass;
@@ -356,9 +420,25 @@
 
         window.saveNote = async function() {
             const txt = textInput.value.trim();
-            if (!txt) return;
+            if (!txt) {
+                showStatus("✍️ Escribe algo antes de guardar", true, 2000);
+                return;
+            }
+
             if (editingNoteId !== null) {
-                await updateNoteInFirestore(editingNoteId, { text: txt, color: selectedColorClass });
+                const note = notesData.find(n => n.id === editingNoteId);
+                if (note) {
+                    note.text = txt;
+                    note.color = selectedColorClass;
+                    if (usingLocalStorage || note.id.startsWith('local')) {
+                        saveToLocalStorage();
+                        renderNotes();
+                        showToast("✏️ Nota editada en el teléfono");
+                    } else {
+                        await updateNoteInFirestore(editingNoteId, { text: txt, color: selectedColorClass });
+                        showToast("✏️ Nota editada en la nube");
+                    }
+                }
             } else {
                 const newNote = {
                     text: txt,
@@ -366,7 +446,25 @@
                     x: Math.random() * 45 + 5,
                     y: Math.random() * 200 + 30
                 };
-                await addNoteToFirestore(newNote);
+
+                if (usingLocalStorage || !currentUserUid) {
+                    const newId = 'local' + Date.now();
+                    notesData.push({ ...newNote, id: newId });
+                    saveToLocalStorage();
+                    renderNotes();
+                    showToast("📝 Nota guardada en el teléfono");
+                } else {
+                    const docId = await addNoteToFirestore(newNote);
+                    if (docId) {
+                        showToast("📝 Nota guardada en la nube");
+                    } else {
+                        const newId = 'local' + Date.now();
+                        notesData.push({ ...newNote, id: newId });
+                        saveToLocalStorage();
+                        renderNotes();
+                        showToast("📝 Nota guardada en el teléfono (Firestore falló)");
+                    }
+                }
             }
             closeNoteModal();
         };
@@ -383,8 +481,17 @@
         };
 
         window.deleteNote = function(id) {
-            if (confirm("¿Eliminar esta nota?")) {
+            if (!confirm("¿Eliminar esta nota?")) return;
+            if (id.startsWith('local')) {
+                notesData = notesData.filter(n => n.id !== id);
+                saveToLocalStorage();
+                renderNotes();
+                showToast("🗑️ Nota eliminada del teléfono");
+            } else {
                 deleteNoteFromFirestore(id);
+                notesData = notesData.filter(n => n.id !== id);
+                renderNotes();
+                showToast("🗑️ Nota eliminada de la nube");
             }
         };
 
@@ -393,11 +500,11 @@
             toast.innerText = msg;
             toast.classList.remove('hidden');
             setTimeout(() => toast.classList.remove('opacity-0'), 10);
-            setTimeout(() => toast.classList.add('opacity-0'), 2000);
-            setTimeout(() => toast.classList.add('hidden'), 2300);
+            setTimeout(() => toast.classList.add('opacity-0'), 2500);
+            setTimeout(() => toast.classList.add('hidden'), 2800);
         }
 
-// ----- EFECTOS DE CONFETI Y FUEGOS ARTIFICIALES (COMPLETO) -----
+        // ----- EFECTOS DE CONFETI Y FUEGOS ARTIFICIALES (COMPLETO) -----
         const confettiCanvas = document.getElementById('confetti-canvas');
         const ctxConf = confettiCanvas.getContext('2d');
         const fireworksCanvas = document.getElementById('fireworks-canvas');
@@ -557,9 +664,7 @@
             requestAnimationFrame(animate);
         }
 
-        window.onload = function() {
-            animate();
-        };
+        animate();
     </script>
 </body>
 </html>
