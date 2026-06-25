@@ -264,8 +264,7 @@ function listenToFirestore() {
     if (unsubscribe) unsubscribe();
 
     const notesRef = collection(db, "notas");
-    const q = query(notesRef, where("uid", "==", currentUserUid), orderBy("createdAt", "asc"));
-
+    const q = query(notesRef, where("uid", "==", currentUserUid));
     unsubscribe = onSnapshot(q, (snapshot) => {
         if (snapshot.empty) {
             const stored = localStorage.getItem('papas_notes_2026');
