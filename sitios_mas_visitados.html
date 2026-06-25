@@ -1,164 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sitios Favoritos de Papá</title>
-    <!-- Tailwind CSS para un diseño súper moderno, limpio y responsive -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Capas de fondo para que los efectos interactivos no molesten al tocar */
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 5;
-        }
-        #bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08) 0%, rgba(15, 23, 42, 1) 100%);
-            transition: background 0.3s ease;
-        }
+        canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 5; }
+        #bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: radial-gradient(circle at 50% 50%, rgba(59,130,246,0.08) 0%, rgba(15,23,42,1) 100%); transition: background 0.3s ease; }
     </style>
 </head>
 <body class="bg-slate-950 text-white min-h-screen font-sans relative overflow-x-hidden select-none">
-
-    <!-- Efecto de brillo de fondo interactivo -->
     <div id="bg-glow"></div>
-
-    <!-- Lienzos independientes para efectos de fiesta (Confeti y Cohetes) -->
     <canvas id="confetti-canvas"></canvas>
     <canvas id="fireworks-canvas"></canvas>
 
-    <!-- Estructura de la página sobrepuesta -->
     <div class="relative z-10 min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-950/40 via-transparent to-emerald-950/40">
-        
-        <!-- Barra de Navegación Chapina -->
-        <nav class="bg-slate-900/80 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-30">
-            <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
+        <!-- BARRA DE NAVEGACIÓN UNIVERSAL -->
+        <nav class="bg-slate-900/90 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-50">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
                 <a href="/" class="text-xl font-black tracking-wider text-emerald-400 drop-shadow-md">💙 PAPÁ 2026 💚</a>
-                <div class="flex flex-wrap gap-2 text-xs md:text-sm font-semibold">
-                    <a href="/sitios_mas_visitados" class="text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/30">🌐 Favoritos</a>
-                    <a href="/poncita" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🌸 Poncita</a>
-                    <a href="/poncito" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">💎 Poncito</a>
-                    <a href="/recuerdos" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">📅 Bitácora</a>
-                    <a href="/calculadora" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">🧮 Calculadora</a>
-                    <a href="/notas" class="hover:text-emerald-300 transition bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">📌 Notas</a>
+                <div class="flex flex-wrap justify-center gap-2 text-[10px] md:text-xs font-semibold">
+                    <a href="/" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🏠 Inicio</a>
+                    <a href="sitios_mas_visitados.html" class="text-emerald-400 bg-emerald-500/10 px-2.5 py-1.5 rounded-lg border border-emerald-500/30">🌐 Favoritos</a>
+                    <a href="poncita.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🌸 Poncita</a>
+                    <a href="poncito.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">💎 Poncito</a>
+                    <a href="recuerdos.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">📅 Bitácora</a>
+                    <a href="calculadora.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🧮 Calculadora</a>
+                    <a href="notas.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">📌 Notas</a>
+                    <a href="traductor.html" class="hover:text-emerald-300 transition bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">🌎 Traductor</a>
                 </div>
             </div>
         </nav>
 
-        <!-- Contenido Central de las Aplicaciones -->
         <main class="max-w-5xl mx-auto px-4 py-10 flex-grow flex flex-col items-center justify-center text-center gap-8 w-full">
-            
-            <!-- Encabezado de la Sección -->
             <header class="space-y-2">
-                <h1 class="text-3xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent drop-shadow-md animate-pulse">
-                    ACCESOS DIRECTOS DE PAPÁ 🌐
-                </h1>
-                <p class="text-sm md:text-lg text-blue-200 max-w-md mx-auto font-medium">
-                    Tus aplicaciones favoritas en un solo lugar, rápido y bien práctico. ✨
-                </p>
+                <h1 class="text-3xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent drop-shadow-md animate-pulse">ACCESOS DIRECTOS DE PAPÁ 🌐</h1>
+                <p class="text-sm md:text-lg text-blue-200 max-w-md mx-auto font-medium">Tus aplicaciones favoritas en un solo lugar, rápido y bien práctico. ✨</p>
             </header>
 
-            <!-- Grid de Tarjetas de Botones Dinámicos -->
             <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full max-w-4xl px-2 z-20">
-                
-                <!-- Gmail -->
                 <a href="https://mail.google.com" target="_blank" class="group bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-red-500/20 hover:border-red-500/60 shadow-lg hover:shadow-red-500/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center gap-3 active:scale-95">
-                    <div class="w-14 h-14 bg-red-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                        📩
-                    </div>
+                    <div class="w-14 h-14 bg-red-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">📩</div>
                     <span class="font-bold text-sm tracking-wide text-gray-200 group-hover:text-white">Gmail</span>
                 </a>
-
-                <!-- Facebook -->
                 <a href="https://www.facebook.com" target="_blank" class="group bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-blue-600/20 hover:border-blue-600/60 shadow-lg hover:shadow-blue-600/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center gap-3 active:scale-95">
-                    <div class="w-14 h-14 bg-blue-600/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                        👥
-                    </div>
+                    <div class="w-14 h-14 bg-blue-600/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">👥</div>
                     <span class="font-bold text-sm tracking-wide text-gray-200 group-hover:text-white">Facebook</span>
                 </a>
-
-                <!-- Duolingo -->
                 <a href="https://www.duolingo.com" target="_blank" class="group bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-green-500/20 hover:border-green-500/60 shadow-lg hover:shadow-green-500/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center gap-3 active:scale-95">
-                    <div class="w-14 h-14 bg-green-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                        🦉
-                    </div>
+                    <div class="w-14 h-14 bg-green-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">🦉</div>
                     <span class="font-bold text-sm tracking-wide text-gray-200 group-hover:text-white">Duolingo</span>
                 </a>
-
-                <!-- Google -->
                 <a href="https://www.google.com" target="_blank" class="group bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 shadow-lg hover:shadow-yellow-500/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center gap-3 active:scale-95">
-                    <div class="w-14 h-14 bg-yellow-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                        🔍
-                    </div>
+                    <div class="w-14 h-14 bg-yellow-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">🔍</div>
                     <span class="font-bold text-sm tracking-wide text-gray-200 group-hover:text-white">Google</span>
                 </a>
-
-                <!-- WPS Office -->
                 <a href="https://www.wps.com" target="_blank" class="group bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-rose-600/20 hover:border-rose-600/60 shadow-lg hover:shadow-rose-600/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center gap-3 active:scale-95">
-                    <div class="w-14 h-14 bg-rose-600/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                        📂
-                    </div>
+                    <div class="w-14 h-14 bg-rose-600/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">📂</div>
                     <span class="font-bold text-sm tracking-wide text-gray-200 group-hover:text-white">WPS Office</span>
                 </a>
-
-                <!-- Google Maps -->
                 <a href="https://maps.google.com" target="_blank" class="group bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/60 shadow-lg hover:shadow-emerald-500/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center gap-3 active:scale-95">
-                    <div class="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                        📍
-                    </div>
+                    <div class="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">📍</div>
                     <span class="font-bold text-sm tracking-wide text-gray-200 group-hover:text-white">Google Maps</span>
                 </a>
-
-                <!-- Zoom -->
                 <a href="https://zoom.us" target="_blank" class="group bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-cyan-500/20 hover:border-cyan-500/60 shadow-lg hover:shadow-cyan-500/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center gap-3 active:scale-95">
-                    <div class="w-14 h-14 bg-cyan-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                        📹
-                    </div>
+                    <div class="w-14 h-14 bg-cyan-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">📹</div>
                     <span class="font-bold text-sm tracking-wide text-gray-200 group-hover:text-white">Zoom</span>
                 </a>
-
-                <!-- TikTok -->
                 <a href="https://www.tiktok.com" target="_blank" class="group bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-purple-500/20 hover:border-purple-500/60 shadow-lg hover:shadow-purple-500/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center gap-3 active:scale-95">
-                    <div class="w-14 h-14 bg-purple-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                        🎵
-                    </div>
+                    <div class="w-14 h-14 bg-purple-500/10 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">🎵</div>
                     <span class="font-bold text-sm tracking-wide text-gray-200 group-hover:text-white">TikTok</span>
                 </a>
-
             </section>
 
-            <!-- Botón de Retorno Rápido -->
             <div class="z-20 mt-4">
-                <a href="/" class="bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white px-6 py-3 rounded-xl border border-white/10 transition text-sm font-bold shadow-md active:scale-95">
-                    ⬅️ Regresar al Inicio
-                </a>
+                <a href="/" class="bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white px-6 py-3 rounded-xl border border-white/10 transition text-sm font-bold shadow-md active:scale-95">⬅️ Regresar al Inicio</a>
             </div>
-
         </main>
 
-        <!-- Pie de Página -->
         <footer class="bg-slate-950 text-[10px] text-center p-4 border-t border-white/5 text-gray-500">
             <p>Hecho con todo el amor de tu hijo que te adora con el corazón • 2026 🥇</p>
         </footer>
-
     </div>
 
-    <!-- Script de Lógica para Confeti Realista y Cohetes que Estallan -->
     <script>
+        // ----- EFECTOS DE CONFETI Y FUEGOS ARTIFICIALES (COMPLETO) -----
         const confettiCanvas = document.getElementById('confetti-canvas');
         const ctxConf = confettiCanvas.getContext('2d');
-
         const fireworksCanvas = document.getElementById('fireworks-canvas');
         const ctxFire = fireworksCanvas.getContext('2d');
 
@@ -171,7 +100,6 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // --- SISTEMA DE CONFETI REALISTA (3D) ---
         class ConfettiParticle {
             constructor() {
                 this.reset();
@@ -194,10 +122,7 @@
                 this.angle += this.oscillationSpeed;
                 this.x += Math.sin(this.angle) * 0.8 + this.speedX;
                 this.rotation += this.rotationSpeed;
-
-                if (this.y > confettiCanvas.height + 20) {
-                    this.reset();
-                }
+                if (this.y > confettiCanvas.height + 20) this.reset();
             }
             draw() {
                 ctxConf.save();
@@ -211,11 +136,8 @@
         }
 
         const confettiArray = [];
-        for (let i = 0; i < 50; i++) {
-            confettiArray.push(new ConfettiParticle());
-        }
+        for (let i = 0; i < 50; i++) confettiArray.push(new ConfettiParticle());
 
-        // --- SISTEMA DE FUEGOS ARTIFICIALES (ESTILO COHETE QUE SUBE) ---
         let fireworks = [];
         let particles = [];
 
@@ -233,10 +155,8 @@
             update() {
                 this.trail.push({ x: this.x, y: this.y });
                 if (this.trail.length > 10) this.trail.shift();
-
                 this.x += Math.cos(this.angle) * this.speed;
                 this.y += Math.sin(this.angle) * this.speed;
-
                 if (this.y <= this.targetY) {
                     explode(this.targetX, this.targetY, this.color);
                     return false;
@@ -250,7 +170,7 @@
                     ctxFire.lineTo(this.trail[i].x, this.trail[i].y);
                 }
                 ctxFire.strokeStyle = this.color;
-                ctxFire.lineWidth = 2;
+                ctxFire.lineWidth = 2.5;
                 ctxFire.stroke();
             }
         }
@@ -293,23 +213,19 @@
         }
 
         function explode(x, y, color) {
-            for (let i = 0; i < 60; i++) {
-                particles.push(new SparkParticle(x, y, color));
-            }
+            for (let i = 0; i < 50; i++) particles.push(new SparkParticle(x, y, color));
             const bg = document.getElementById('bg-glow');
-            bg.style.background = `radial-gradient(circle at ${x}px ${y}px, ${color.replace('hsl', 'hsla').replace(')', ', 0.20)')} 0%, rgba(15, 23, 42, 1) 80%)`;
+            bg.style.background = `radial-gradient(circle at ${x}px ${y}px, ${color.replace('hsl', 'hsla').replace(')', ', 0.20)')} 0%, rgba(15,23,42,1) 80%)`;
             setTimeout(() => {
-                bg.style.background = 'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08) 0%, rgba(15, 23, 42, 1) 100%)';
+                bg.style.background = 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.08) 0%, rgba(15,23,42,1) 100%)';
             }, 250);
         }
 
-        // Toques en pantalla para lanzar cohetes (solo en espacios vacíos de la pantalla)
         window.addEventListener('pointerdown', (e) => {
             if (e.target.closest('a') || e.target.closest('nav') || e.target.closest('button')) return;
             fireworks.push(new Firework(e.clientX, window.innerHeight, e.clientX, e.clientY));
         });
 
-        // Lanzamiento automático lento de fondo para darle vida a la pantalla
         setInterval(() => {
             if (document.hidden) return;
             const x = Math.random() * window.innerWidth;
@@ -317,28 +233,21 @@
             fireworks.push(new Firework(x, window.innerHeight, x, targetY));
         }, 3500);
 
-        // --- ANIMACIÓN GLOBAL ---
         function animate() {
             ctxConf.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-            confettiArray.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
-            ctxFire.fillStyle = 'rgba(15, 23, 42, 0.16)';
+            confettiArray.forEach(p => { p.update(); p.draw(); });
+            ctxFire.fillStyle = 'rgba(15,23,42,0.16)';
             ctxFire.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
-
             fireworks = fireworks.filter(f => f.update());
             fireworks.forEach(f => f.draw());
-
             particles = particles.filter(p => p.update());
             particles.forEach(p => p.draw());
-
             requestAnimationFrame(animate);
         }
 
-        window.onload = animate;
+        window.onload = function() {
+            animate();
+        };
     </script>
 </body>
-              </html>
-  
+</html>
