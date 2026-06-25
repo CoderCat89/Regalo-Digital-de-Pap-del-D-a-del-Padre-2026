@@ -1,5 +1,7 @@
 # 🎉 🎆 ¡FELIZ DÍA DEL PADRE 2026, PAPÁ! 🎆 🎉
-## 💙 💚 El rincón digital más especial para el mejor Papá del universo entero 💚 💙
+## 💙 💚 El rincón digital más especial para el mejor Papá del universo entero 💚 💙 
+# Link: https://codercat89.github.io/Regalo-Digital-de-Pap-del-D-a-del-Padre-2026/index.html
+
 ¡Hola, Papá! 👋 Bienvenido a este rincón en internet que construí con todo mi corazón, desveladas felices y puro cariño especialmente para ti. 🚀 🏆 Eres mi gran ejemplo, mi mejor amigo y el mejor Papá que Dios me pudo dar en esta vida. 👨‍👦 ✨
 Este espacio interactivo está diseñado para celebrar tu día por todo lo alto en este año 2026. Es un regalo sumamente moderno, rápido y lleno de detalles pensados únicamente para sacarte una sonrisa gigante todos los días. ¡Te mereces el cielo entero, Papá! ¡Muchísimas felicidades! 🥇 🌟 🎁
 ## 🌟 Las Sorpresas que Diseñé para Ti 🌟
@@ -47,7 +49,7 @@ Como eres un Papá súper tecnológico, agregué un sistema de traducción direc
 ## 🚀 ¿Dónde y Cómo Está Alojado Este Sitio? 🚀
 Este regalo está alojado en la nube gracias a **GitHub Pages**, lo que significa que es un sitio web real, seguro y gratuito que estará en internet para siempre. Puedes acceder a él desde cualquier parte del mundo. 🌍 💻
 ### 🛠️ Detalles del Despliegue:
- * **Dirección del Sitio:** El sitio se encuentra publicado en tu dominio de GitHub Pages: https://edwin-aaron.github.io/proyecto-papa (o la URL que configures en tu repositorio).
+ * **Dirección del Sitio:** El sitio se encuentra publicado en tu dominio de GitHub Pages: https://codercat89.github.io/Regalo-Digital-de-Pap-del-D-a-del-Padre-2026/index.html
  * **Rutas Limpias con _redirects:** El proyecto incluye un archivo de configuración llamado _redirects que permite que cuando navegues de una página a otra (por ejemplo, a /poncito o /sitios_más_visitados), la barra de direcciones se vea limpia y profesional, sin el molesto .html.
  * **Optimización Móvil:** El sitio está optimizado para cargar súper rápido tanto en tu teléfono celular como en cualquier tablet o computadora.
 ## 📂 Estructura Completa del Repositorio 📂
